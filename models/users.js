@@ -4,23 +4,13 @@ module.exports = function(sequelize, DataTypes) {
 	let User = sequelize.define("User", {
 
     first_name: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        notNull: {
-          msg: "Please enter your first name."
-        }
-      }
+			type: DataTypes.STRING,
+			defaultValue: "Morgan"
     },
 
     last_name: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        notNull: {
-          msg: "Please enter your first name."
-        }
-      }
+			type: DataTypes.STRING,
+			defaultValue: "Doe"
     },
 			
 		username: {

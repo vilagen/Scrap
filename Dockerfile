@@ -1,7 +1,7 @@
 FROM node:12.4
-EXPOSE 8800
+EXPOSE 8888
 
-WORKDIR /user/src/scrap-api
+WORKDIR /usr/src/scrap-api
 
 COPY ./ ./
 

@@ -1,34 +1,33 @@
 version: '3.7'
 
 # Backend API
-# I believe this will be running out backend processes, like updating our postgres and redis tables
 services:
   scrap-api:
     container_name: backend
     # image node: 12.14.0
     build: ./
     command: npm start
-    working_dir: /user/src/scrap-api
+    working_dir: /usr/src/scrap-api
     environment: 
       POSTGRES_USER: david
       POSTGRES_PASSWORD: secret
-      POSTGRES_DB: scrap-api
+      POSTGRES_DB: scrap-docker
       POSTGRES_HOST: postgres
       REDIS_URI: redis://redis:6379
     links:
       - postgres
       - redis
     ports:
-      - "3001:3001"
+      - "3001:3090"
     volumes:
-      - ./:/user/src/scrap-api
-  
+      - ./:/usr/src/scrap-api
+      
   # This is for running Postgres
   postgres:
     environment: 
       POSTGRES_USER: david
       POSTGRES_PASSWORD: secret
-      POSTGRES_DB: scrap-api
+      POSTGRES_DB: scrap-docker
       POSTGRES_HOST: postgres
     build: ./postgres
     # the build is referring to building what is in the postgres folder

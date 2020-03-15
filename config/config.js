@@ -2,12 +2,19 @@ require('dotenv').config()
 
 module.exports = {
   "development": {
-    "username": process.env.POSTGRES_USER,
-    "password": process.env.POSTGRES_PASSWORD,
-    "database": process.env.POSTGRES_DB,
-    "host": process.env.POSTGRES_HOST,
+    "username": "david",
+    "password": "secret",
+    "database": "scrap-docker",
+    "host": "localhost",
     "dialect": "postgres",
-    "operatorsAliases": false
+
+  // "development": {
+  //   "username": process.env.POSTGRES_USER,
+  //   "password": process.env.POSTGRES_PASSWORD,
+  //   "database": process.env.POSTGRES_DB,
+  //   "host": process.env.POSTGRES_HOST,
+  //   "dialect": 'postgres',
+  //   "logging": true
   },
 
   "test": {
