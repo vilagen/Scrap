@@ -12,27 +12,28 @@ services:
       POSTGRES_USER: david
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: scrap-docker
-      POSTGRES_HOST: postgres
+      # POSTGRES_HOST: postgres
       REDIS_URI: redis://redis:6379
     links:
       - postgres
       - redis
     ports:
-      - "3001:3090"
+      - "3001:3001"
     volumes:
       - ./:/usr/src/scrap-api
       
   # This is for running Postgres
   postgres:
+    image: postgres
     environment: 
       POSTGRES_USER: david
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: scrap-docker
-      POSTGRES_HOST: postgres
+      # POSTGRES_HOST: postgres
     build: ./postgres
     # the build is referring to building what is in the postgres folder
     ports:
-      - "5431:5432"
+      - "5433:5432"
   
   # This is for running Redis
   redis:

@@ -5,16 +5,16 @@ module.exports = {
     "username": "david",
     "password": "secret",
     "database": "scrap-docker",
-    "host": "localhost",
+    "host": "postgres",
     "dialect": "postgres",
 
   // "development": {
   //   "username": process.env.POSTGRES_USER,
   //   "password": process.env.POSTGRES_PASSWORD,
   //   "database": process.env.POSTGRES_DB,
-  //   "host": process.env.POSTGRES_HOST,
+  //   "host": 'localhost',
   //   "dialect": 'postgres',
-  //   "logging": true
+  //   "logging": true,
   },
 
   "test": {
