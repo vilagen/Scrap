@@ -7,12 +7,8 @@ import './style.css';
 
 const initialState = {
   isSigned: false,
-  currentNews: []
+  currentNews: [] // change this to just news
 };
-
-// const currentNewsSearch = () => {
-// 	API.newsSearch()
-// }
 
 class Home extends Component {
   constructor() {
@@ -74,11 +70,25 @@ class Home extends Component {
 
 					<Col xs={12}>
 
-						<button style={{color:"dodgerblue"}}				
-              onClick={this.newsSearch}
-              >
-							Current News
-						</button>
+						<div>
+
+							<form>
+
+								<label for="topic">Topic</label>
+								<input type="text" id="topic" className="mx-2" aria-describedby="emailHelp" />
+								<label for="country">Country</label>
+								<input type="text" id="country" className="mx-2" aria-describedby="emailHelp" />
+								<button style={{color:"dodgerblue"}}				
+								onClick={this.newsSearch}
+								>
+								Search
+							</button>
+							
+							</form>
+
+						</div>
+
+
 						
 					</Col>
 				
