@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const userNewsController = require("../../controllers/news");
 
-// Matches with "api/topic"
+// Matches with "api/topicheadlines"
 router.route("/:query")
-  .get(userNewsController.newsTopicResults);
+  .get(userNewsController.newsTopicHeadlines);
 
 module.exports = router;

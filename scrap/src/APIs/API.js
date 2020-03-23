@@ -2,22 +2,22 @@ import axios from "axios";
 
 export default {
 
-    newsSearch: () => { 
-        return axios.get("/api/currentnews");
-    },
+	newsSearch: () => { 
+			return axios.get("/api/currentnews");
+	},
 
-    userNewsSearch: (topic, country) => {
-        if( (!topic && !country) || (topic === undefined && country === undefined) ) {
-            return axios.get("/api/currentnews");
-        }
-        else if(!topic || topic === undefined) {
-            return axios.get(`api/country/${country}`);
-        }
-        else if(!country || country === undefined) {
-            return axios.get(`api/topic/${topic}`);
-        }
-        else {
-            return axios.get("api/userNews", {params: {q: topic, country}});
-        };
-    }
+userNewsSearch: (topic, headlines) => {
+		// if( (!topic && !headlines) || (topic === undefined && headlines === undefined) ) {
+		//     return axios.get("/api/currentnews");
+		// }
+		if(!topic || topic === undefined) {
+			return axios.get(`api/currentnews`);
+		}
+		else if(topic && headlines === "yes") {
+			return axios.get(`api/topicheadlines/${topic}`);
+		}
+		else if(topic && headlines === "no") {
+			return axios.get(`api/topiceverything/${topic}`);
+		};
+	}
 }

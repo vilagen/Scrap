@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const currentNewsRoutes = require("./currentnews");
-const topicNewsRoutes = require("./userNewsTopic");
+const topicHeadlinesNewsRoutes = require("./userNewsTopicHeadlines");
+const topicEverythingNewsRoutes = require("./userNewsTopicEverything");
 const countryNewsRoutes = require("./userNewsCountry");
 const userNewsRoutes = require("./userNewsSearch");
 // const signupRoutes = require("./signup");
@@ -8,9 +9,10 @@ const userNewsRoutes = require("./userNewsSearch");
 
 // news API routes
 router.use("/currentnews", currentNewsRoutes);
-router.use("/topic", topicNewsRoutes);
-router.use("/country", countryNewsRoutes);
-router.use("/userNews", userNewsRoutes);
+router.use("/topicheadlines", topicHeadlinesNewsRoutes);
+router.use("/topiceverything", topicEverythingNewsRoutes);
+// router.use("/country", countryNewsRoutes);
+// router.use("/userNews", userNewsRoutes);
 
 // // signup route
 // router.use("/signup", signupRoutes);

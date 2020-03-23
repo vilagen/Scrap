@@ -7,9 +7,10 @@ import './style.css';
 
 const initialState = {
   isSigned: false,
-	news: [], // change this to just news
+	news: [],
 	topic: "",
-	country: "",
+	headlines: "yes",
+	// country: "",
 };
 
 class Home extends Component {
@@ -38,9 +39,22 @@ class Home extends Component {
 	// 	console.log(this.state.news);
 	// };
 
+	// <label htmlFor="country">Country</label>
+	// <input 
+	// className="mx-2" 
+	// name="country"
+	// type="text" 
+	// id="topic"
+	// value={this.state.country}
+	// aria-describedby="newsCountry"
+	// onChange={this.handleInputChange}
+	// onSubmit={this.userNewsSearchSubmit}
+	// placeholder="USA, Canada, Iceland, Chad, etc" 
+	// />
+
 	userNewsSearchSubmit = (event) => {
 		event.preventDefault();
-		API.userNewsSearch(this.state.topic, this.state.country)
+		API.userNewsSearch(this.state.topic, this.state.headlines)
 			.then( res => this.setState( {news: res.data} ))
 		.catch( err => console.log(err));
 		console.log(this.state.news);
@@ -52,8 +66,14 @@ class Home extends Component {
 		this.setState({
 				[name]: value
 		});
-		console.log(value)
-		console.log(name)
+		console.log(this.state.topic)
+	};
+
+	handleOptionChange = event => {
+		this.setState({
+				headlines: event.target.value 
+		});
+		console.log(this.state.headlines)
 	};
 
 	async componentDidMount() {
@@ -74,11 +94,21 @@ class Home extends Component {
 			flexDirection: "row",
 			justifyContent: "center",
 			alignItems: "center",
-			textAlign: "center",
+			// textAlign: "center",
 			backgroundColor: "yellow",
-    };
+		};
+		
+		const radioButtonStyle = {
+			// borderStyle: "solid",
+			display: "flex",
+			flexDirection: "column",
+			justifyContent: "flex-start",
+		};
+
+		console.log(this.state.headlines)
 
 		return (
+
 			<div>
 
 				<Header></Header>
@@ -100,52 +130,63 @@ class Home extends Component {
 		
 				</Row>
 
-				<Row style={newsButtonStyle}>
+				<Row>
 
 					<Col xs={12}>
 
-						<div>
+						<form style={newsButtonStyle}>
 
-							<form>
+							<label htmlFor="topic">Topic: </label>
+							<input
+							className="mx-2" 
+							name="topic"
+							type="text" 
+							id="topic"
+							value={this.state.topic}
+							aria-describedby="newsTopic"
+							onChange={this.handleInputChange}
+							onSubmit={this.userNewsSearchSubmit}
+							placeholder="Politics, Sports, Technology, etc"
+							/>
 
-								<label htmlFor="topic">Topic</label>
-								<input
-								className="mx-2" 
-								name="topic"
-								type="text" 
-								id="topic"
-								value={this.state.topic}
-								aria-describedby="newsTopic"
-								onChange={this.handleInputChange}
-								onSubmit={this.userNewsSearchSubmit}
-								placeholder="Politics, Sports, Technology, etc"
-								/>
+							<div className="mx-2">
 
-								<label htmlFor="country">Country</label>
-								<input 
-								className="mx-2" 
-								name="country"
-								type="text" 
-								id="topic"
-								value={this.state.country}
-								aria-describedby="newsCountry"
-								onChange={this.handleInputChange}
-								onSubmit={this.userNewsSearchSubmit}
-								placeholder="USA, Canada, Iceland, Chad, etc" 
-								/>
+								<div className="radio" style={radioButtonStyle}>
+									<label className="headlineRadio" htmlFor="headlineRadio">
+										<input 
+										type="radio" 
+										name="headlines" 
+										value="yes"
+										// checked={this.state.headlines === "option1"}
+										onChange={this.handleOptionChange}
+										/>
+										Headlines
+									</label>
+								</div>
 
-								<button style={{color:"dodgerblue"}}				
-								onClick={this.userNewsSearchSubmit}
-								>
-								Search
-								</button>
-							
-							</form>
+								<div className="radio" style={radioButtonStyle}>
+									<label className="headlineRadio" htmlFor="headlineRadio">
+										<input 
+										type="radio" 
+										name="headlines" 
+										value="no"
+										// checked={this.state.headlines === "option2"}
+										onChange={this.handleOptionChange}
+										/>
+										Everything
+									</label>
+								</div>
 
-						</div>
+							</div>
 
-
+							<button style={{color:"dodgerblue"}}				
+							onClick={this.userNewsSearchSubmit}
+							>
+							Search
+							</button>
 						
+						</form>
+					
 					</Col>
 				
 				</Row>
@@ -154,28 +195,32 @@ class Home extends Component {
 
 					<Col xs={12}>
 
+					{this.state.news.length === 0
+						?
+							<div>
+								<h1 id="scrap2" style={{textAlign:"center"}}>Sorry. There were no results.</h1>
+							</div>
+						: 
 						<NewsList>
-							{this.state.news.map( (stories, i) => (
-								<NewsListItem
-									key={i}
-									source={stories.source.id}
-									author={stories.author}
-									title={stories.title}
-									image={stories.urlToImage}
-									description={stories.description}
-									url={stories.url}
-									published={stories.published}
-									/>
-								)
-							)};
-						</NewsList>
+						{this.state.news.map( (stories, i) => (
+							<NewsListItem
+								key={i}
+								source={stories.source.id}
+								author={stories.author}
+								title={stories.title}
+								image={stories.urlToImage}
+								description={stories.description}
+								url={stories.url}
+								published={stories.published}
+								/>
+							)
+						)};
+					</NewsList>						
+					}
 
 					</Col>
 					
 				</Row>
-
-
-
 
 			</div>
 		)
@@ -183,3 +228,29 @@ class Home extends Component {
 }
 
 export default Home
+
+// <div className="radio" style={radioButtonStyle}>
+// <label className="headlineRadio">
+// 	<input 
+// 	type="radio" 
+// 	name="headlineRadio" 
+// 	value={true} 
+// 	checked={this.state.headlines === true}
+// 	onChange={this.handleOptionChange}
+// 	/>
+// 	Headlines
+// </label>
+// </div>
+
+// <div className="radio" style={radioButtonStyle}>
+// <label className="headlineRadio">
+// 	<input 
+// 	type="radio" 
+// 	name="headlineRadio" 
+// 	value={false} 
+// 	checked={this.state.headlines === false}
+// 	onChange={this.handleOptionChange}
+// 	/>
+// 	Everything
+// </label>
+// </div>
