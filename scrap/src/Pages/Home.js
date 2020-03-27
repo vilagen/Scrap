@@ -9,7 +9,7 @@ const initialState = {
   isSigned: false,
 	news: [],
 	topic: "",
-	headlines: "yes",
+	headlines: true,
 	// country: "",
 };
 
@@ -69,10 +69,17 @@ class Home extends Component {
 		console.log(this.state.topic)
 	};
 
-	handleOptionChange = event => {
-		this.setState({
-				headlines: event.target.value 
-		});
+	// handleOptionChange = event => {
+	// 	this.setState({
+	// 			headlines: event.target.value 
+	// 	});
+	// 	console.log(this.state.headlines)
+	// };
+
+	handleOptionChange2 = () => {
+		this.setState(prevState => ({
+			headlines: !prevState.headlines
+		}));
 		console.log(this.state.headlines)
 	};
 
@@ -156,9 +163,9 @@ class Home extends Component {
 										<input 
 										type="radio" 
 										name="headlines" 
-										value="yes"
+										value={true}
 										// checked={this.state.headlines === "option1"}
-										onChange={this.handleOptionChange}
+										onChange={this.handleOptionChange2}
 										/>
 										Headlines
 									</label>
@@ -169,9 +176,9 @@ class Home extends Component {
 										<input 
 										type="radio" 
 										name="headlines" 
-										value="no"
+										value={false}
 										// checked={this.state.headlines === "option2"}
-										onChange={this.handleOptionChange}
+										onChange={this.handleOptionChange2}
 										/>
 										Everything
 									</label>
