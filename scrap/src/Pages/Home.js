@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col } from "reactstrap";
 import Header from "../components/Header/Header";
+import ProfileIcon from "../components/Profile/ProfileIcon";
 import { NewsList, NewsListItem } from "../components/NewsContainer/NewsContainer";
 import API from "../APIs/API";
 import './style.css';
@@ -118,7 +119,9 @@ class Home extends Component {
 
 			<div>
 
-				<Header></Header>
+			<Header>
+			<ProfileIcon/>
+			</Header>
 
 				<Row>
 

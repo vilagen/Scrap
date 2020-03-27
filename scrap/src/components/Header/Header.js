@@ -1,13 +1,13 @@
 import React from "react";
 import "./style.css";
 
-function scrapHeader() {
+function scrapHeader(props) {
 
     return (
         <header className="sHeader">
-            Login
+            {props.children}
         </header>
     )
 }
 
-export default scrapHeader
+export default scrapHeader;
