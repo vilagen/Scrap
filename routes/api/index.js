@@ -20,8 +20,8 @@ router.use("/topiceverything", topicEverythingNewsRoutes);
 // register router
 router.use("/register", register)
 
-// // signin route
-// router.use("/signin", signinRoutes);
+// signin route
+router.use("/signin", signin);
 
 // signout route
 router.use("/signout", signout)
