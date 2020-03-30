@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const userNewsController = require("../../controllers/news");
+const userNewsController = require("../../../controllers/news");
 
 // Matches with "api/topiceverything"
 router.route("/:query")

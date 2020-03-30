@@ -46,7 +46,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
 		}
 
-	});
+	}, {});
+	User.associate = models => {
+		User.hasMany(models.Article)
+	}
 
 	return User;
 }
