@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const redis = require("redis");  
 const redisClient = redis.createClient(process.env.REDIS_URI);
 
-const handleRegister = (req, res, next) => {
+const handleRegister = (req, res, err) => {
 
   const { username, email, password, password2 } = req.body;
 
@@ -77,27 +77,37 @@ const createSessions = (res, user) => {
   })
 };
 
-const getAuthTokenId = (req, res) => {
+const delAuthTokenId = (req, res) => {
   const { authorization } = req.headers;
-  return redisClient.get(authorization, (err, reply) => {
-    console.log(reply)
-    if (err || !replay) {
-      return res.status(400).json()
-    }
-    return res.json({id: reply})
-  }); 
+  return redisClient.DEL(authorization, (err, reply) => {
+    console.log('Token deleted.');
+    if(err || !reply) {
+      return res.status(400).json('Token not deleted');
+    };
+    return res.json("Token deleted.")
+  });
 };
 
-const loginAuthentication = (db) => (req, res) => {
+const registerAuthentication = (req, res, err) => {
   const { authorization } = req.headers;
-  return authorization ? getAuthTokenId(req, res) :
-    handleRegister(req, res, db)
+  if(authorization){
+    delAuthTokenId(req, res)
+    handleRegister(req, res, err)
     .then(data => {
       return data.id && data.username ? createSessions(data) :
       Promise.reject(data)
     })
     .then(session => res.json(session))
     .catch(err => res.status(400).json(`Error verifying login during registration. ${err}`));
+  } else {
+    handleRegister(req, res, err)
+    .then(data => {
+      return data.id && data.username ? createSessions(data) :
+      Promise.reject(data)
+    })
+    .then(session => res.json(session))
+    .catch(err => res.status(400).json(`Error verifying login during registration. ${err}`));
+  }
 };
 
 module.exports = {

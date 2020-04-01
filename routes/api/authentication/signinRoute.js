@@ -3,6 +3,6 @@ const signinController = require("../../../controllers/signin");
 
 // Matches "api/signin"
 router.route("/")
-  .post(signinController.handleSignin);
+  .post(signinController.loginAuthentication);
 
 module.exports = router;
