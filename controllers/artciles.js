@@ -20,7 +20,7 @@ const saveArticle = (req, res, err) => {
   db.Article
   .create(req.body)
   .then( data => res.json(data))
-  .catch(err => res.status(422).josn(""))
+  .catch(err => res.status(422).josn(`Error saving articles. ${err}`))
 }
 
 module.exports = {
