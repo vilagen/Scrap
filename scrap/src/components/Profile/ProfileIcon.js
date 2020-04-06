@@ -2,11 +2,20 @@ import React from "react";
 import { Modal } from 'reactstrap';
 import "./style.css";
 
-const [modal, setModal] = useState(false);
-
-const toggle = () => setModal(!modal)
 
 class Profile extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalOpen: false
+    };
+  };
+
+  toggle = () => {
+    this.setState( prevState => ( {modalOpen: !prevState.modalOpen} ) );
+  }
+
   render() {
     return (
       <div>
