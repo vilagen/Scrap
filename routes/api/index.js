@@ -8,6 +8,7 @@ const register = require("./authentication/registerRoute");
 const signin = require("./authentication/signinRoute");
 const signout = require("./authentication/signoutRoute");
 const profile = require("./profileRoute");
+const articles = require("./articlesRoute");
 const { response } = require("express");
 // const signinRoutes = require("./signin");
 
@@ -30,5 +31,8 @@ router.use("/signout", signout);
 // profile routes
 // router.use("/profile", profile); //if I wanted to use req.query
 router.use("/profile", profile);
+
+// user article routes
+router.use("/articles", articles)
 
 module.exports = router;
