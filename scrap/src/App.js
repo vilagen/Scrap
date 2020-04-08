@@ -1,13 +1,12 @@
 import React from 'react';
 import Home from './Pages/Home'
-import Signup from './Pages/Signup'
+import Register from './Pages/Register'
 import './App.css';
 
 function App() {
   return (
     <div>
-      
-      <Signup></Signup>
+      <Register/>
     </div>
   );
 }

@@ -3,11 +3,11 @@ import axios from "axios";
 export default {
 
 	newsSearch: () => { 
-			return axios.get("/api/currentnews")
-			.catch( err => console.log(`Error retriving information. ${err}`))
+		return axios.get("/api/currentnews")
+		.catch( err => console.log(`Error retriving information. ${err}`))
 	},
 
-userNewsSearch: (topic, headlines) => {
+	userNewsSearch: (topic, headlines) => {
 		// if( (!topic && !headlines) || (topic === undefined && headlines === undefined) ) {
 		//     return axios.get("/api/currentnews");
 		// }
@@ -20,5 +20,10 @@ userNewsSearch: (topic, headlines) => {
 		else if(topic && headlines === false) {
 			return axios.get(`api/topiceverything/${topic}`);
 		};
-	}
+	},
+
+	// userRegister: (req, res, err) => {
+	// 	return axios.post(`api/register`)
+	// }
+
 }
