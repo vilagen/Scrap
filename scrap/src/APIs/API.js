@@ -3,7 +3,8 @@ import axios from "axios";
 export default {
 
 	newsSearch: () => { 
-			return axios.get("/api/currentnews");
+			return axios.get("/api/currentnews")
+			.catch( err => console.log(`Error retriving information. ${err}`))
 	},
 
 userNewsSearch: (topic, headlines) => {
