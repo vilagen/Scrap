@@ -26,13 +26,14 @@ class SignUp extends Component {
     window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
   }
 
-	onSubmitRegister = () => {
+	onSubmitRegister = (event) => {
+		event.preventDefault();
 		if (this.state.username === "" || this.state.email === "" || this.state.password === "" || this.state.password2 === "") {
 			alert("All fields must be filled out.")
 		} else if (this.state.password !== this.state.password2) {
 			alert("Passwords do not match.")
 		} else {
-			fetch("api/register", {
+			fetch("http://localhost:3001/api/register", {
 				method: "post",
 				headers: {"Content=Type": "application/json"},
 				body: JSON.stringify({
@@ -46,7 +47,7 @@ class SignUp extends Component {
 			.then( data => {
 				if (data.success && data.userId === "true") {
 				this.saveAuthTokenInSession(data.token)
-					fetch(`api/profile/${data.userId}`, {
+					fetch(`http://localhost:3001/api/profile/${data.userId}`, {
 						method: 'get',
 						headers: {
 							'Content-Type': 'application/json',
@@ -56,10 +57,13 @@ class SignUp extends Component {
 					.then(res => res.json())
 					.then( user => {
 						if(user && user.email) {
+							alert("Sign up was successful.")
 							console.log(user);
 						};
 					});
-				};
+				} else {
+					alert("Info was not saved.");
+				}
 			});
 		};
 	};
