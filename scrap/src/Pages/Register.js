@@ -33,9 +33,9 @@ class SignUp extends Component {
 		} else if (this.state.password !== this.state.password2) {
 			alert("Passwords do not match.")
 		} else {
-			fetch("http://localhost:3001/api/register", {
+			fetch('/api/register', {
 				method: "post",
-				headers: {"Content=Type": "application/json"},
+				headers: {"Content-Type": "application/json"},
 				body: JSON.stringify({
 					username: this.state.username,
 					email: this.state.email,
@@ -45,9 +45,10 @@ class SignUp extends Component {
 			})
 			.then( res => res.json())
 			.then( data => {
-				if (data.success && data.userId === "true") {
+				console.log(data)
+				if (data.success === 'true' && data.userId) {
 				this.saveAuthTokenInSession(data.token)
-					fetch(`http://localhost:3001/api/profile/${data.userId}`, {
+					fetch(`/api/profile/${data.userId}`, {
 						method: 'get',
 						headers: {
 							'Content-Type': 'application/json',
