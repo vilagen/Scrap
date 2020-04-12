@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Button, Form, FormGroup, Label, Input, FormText, Card, CardBody } from "reactstrap";
+import { Button, Form, FormGroup, Label, Input, Card, CardBody } from "reactstrap";
+import { Link, Redirect } from "react-router-dom";
 import './style.css';
 
 class SignUp extends Component {
@@ -11,8 +12,11 @@ class SignUp extends Component {
 			email: "",
 			password: "",
 			password2: "",
+			registerError: "",
+			redirect: null,
 		};
 	};
+
 
 	handleInputChange = event => {
 		const { name, value } = event.target;
@@ -58,12 +62,14 @@ class SignUp extends Component {
 					.then(res => res.json())
 					.then( user => {
 						if(user && user.email) {
-							alert("Sign up was successful.")
-							console.log(user);
+							alert("Sign up was successful!")
+							this.props.userSignIn("true");
+							this.setState({ redirect: "/"})
 						};
 					});
 				} else {
-					alert("Info was not saved.");
+					this.setState({registerError: data.error})
+					alert(this.state.registerError);
 				}
 			});
 		};
@@ -73,75 +79,80 @@ class SignUp extends Component {
 
 	// }
 
-		render() {
+	render() {
 
-      return (
+		if (this.state.redirect) {
+			return <Redirect to={this.state.redirect} />
+		}
 
-				<div>
+		return (
 
-					<div className="centerPage">
+			<div>
 
-						<Card style={{ width: '20rem' }}>
+				<div className="centerPage">
 
-							<CardBody>
+					<Card style={{ width: '20rem' }}>
 
-								<Form>
+						<CardBody>
 
-									<FormGroup controlId="formBasicEmail">
-											<Label className="d-flex justify-content-start">Username</Label>
-											<Input
-											name="username"
-											type="text" 
-											placeholder="Username"
-											value={this.state.username}
-											onChange={this.handleInputChange}
-											/>
-									</FormGroup>
+							<Form>
 
-									<FormGroup controlId="formBasicEmail">
-											<Label className="d-flex justify-content-start">Email address</Label>
-											<Input 
-											name="email"
-											type="email" 
-											placeholder="Email"
-											value={this.state.email}
-											onChange={this.handleInputChange}
-											/>
-									</FormGroup>
+								<FormGroup controlId="formBasicEmail">
+									<Label className="d-flex justify-content-start">Username</Label>
+									<Input
+									name="username"
+									type="text" 
+									placeholder="Username"
+									value={this.state.username}
+									onChange={this.handleInputChange}
+									/>
+								</FormGroup>
 
-									<FormGroup controlId="formBasicPassword">
-											<Label className="d-flex justify-content-start">Password</Label>
-											<Input 
-											name="password"
-											type="password" 
-											placeholder="Password"
-											value={this.state.password} 
-											onChange={this.handleInputChange}
-											/>
-									</FormGroup>
+								<FormGroup controlId="formBasicEmail">
+									<Label className="d-flex justify-content-start">Email address</Label>
+									<Input 
+									name="email"
+									type="email" 
+									placeholder="Email"
+									value={this.state.email}
+									onChange={this.handleInputChange}
+									/>
+								</FormGroup>
 
-									<FormGroup controlId="formBasicPassword">
-											<Label className="d-flex justify-content-start">Password</Label>
-											<Input 
-											name="password2"
-											type="password" 
-											placeholder="Password" 
-											value={this.state.password2}
-											onChange={this.handleInputChange}
-											/>
-									</FormGroup>
+								<FormGroup controlId="formBasicPassword">
+									<Label className="d-flex justify-content-start">Password</Label>
+									<Input 
+									name="password"
+									type="password" 
+									placeholder="Password"
+									value={this.state.password} 
+									onChange={this.handleInputChange}
+									/>
+								</FormGroup>
 
-									<div>
-										<Button 
-										variant="primary" 
-										type="submit"
-										onClick={this.onSubmitRegister}
-										>
-												Submit
-										</Button>
-									
-										<span class="mr-2"></span>
+								<FormGroup controlId="formBasicPassword">
+									<Label className="d-flex justify-content-start">Password</Label>
+									<Input 
+									name="password2"
+									type="password" 
+									placeholder="Password" 
+									value={this.state.password2}
+									onChange={this.handleInputChange}
+									/>
+								</FormGroup>
 
+								<div>
+									<Button 
+									variant="primary" 
+									type="submit"
+									onClick={this.onSubmitRegister}
+									>
+										Submit
+									</Button>
+								
+									<span class="mr-2"></span>
+
+									<Link to={"/"}>
 										<Button 
 										variant="primary" 
 										type="submit"
@@ -149,12 +160,13 @@ class SignUp extends Component {
 										>
 											Return
 										</Button>
+									</Link>
 
-									</div>
+								</div>
 
-								</Form>
+							</Form>
 
-							</CardBody>
+						</CardBody>
 
 					</Card>    
 
@@ -162,9 +174,10 @@ class SignUp extends Component {
 
 			</div>
 
-		)
+		);
 
-	}
-}
+	};
 
-export default SignUp
+};
+
+export default SignUp;

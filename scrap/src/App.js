@@ -1,14 +1,51 @@
-import React from 'react';
+import React, {Component} from 'react';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from './Pages/Home'
 import Register from './Pages/Register'
+import UserPage from './Pages/UserPage';
 import './App.css';
 
-function App() {
-  return (
-    <div>
-      <Register/>
-    </div>
-  );
+// const initialState = {
+//   isSignedIn: false,
+// };
+
+class App extends Component {
+
+  constructor() {
+    super();
+    this.state = {
+      isSignedIn: false
+    };
+  };
+
+  userSignIn = (verify) => {
+    if (verify === "true") {
+      this.setState({isSignedIn: true});
+    } else {
+      this.setState({isSignedIn: false});
+    }
+  };
+
+  render () {
+    console.log(this.state.isSignedIn);
+    return (
+      <div>
+        <Router>
+
+          <div>
+
+            <Switch>
+              <Route exact path = "/" component ={Home} />
+              <Route exact path ="/register">
+                <Register userSignIn={this.userSignIn}/>
+              </Route>
+            </Switch>
+
+          </div>
+        </Router>
+      </div>
+   );
+  }
 }
 
 export default App;

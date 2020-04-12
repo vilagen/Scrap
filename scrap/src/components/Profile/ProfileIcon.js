@@ -15,10 +15,11 @@
 
 import React, { useState } from 'react';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import "./style.css";
 
 const Example = (props) => {
-  
+
   const [dropdownOpen, setOpen] = useState(false);
 
   const toggle = () => setOpen(!dropdownOpen);
@@ -30,7 +31,11 @@ const Example = (props) => {
       </DropdownToggle>
       <DropdownMenu right>
         <DropdownItem>Signin</DropdownItem>
-        <DropdownItem>Register</DropdownItem>
+        <DropdownItem>
+          <Link to={"/register"}>
+          Register
+          </Link>
+        </DropdownItem>
         <DropdownItem>Profile</DropdownItem>
         <DropdownItem divider />
         <DropdownItem>Signout</DropdownItem>

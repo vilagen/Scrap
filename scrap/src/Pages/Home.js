@@ -6,18 +6,14 @@ import { NewsList, NewsListItem } from "../components/NewsContainer/NewsContaine
 import API from "../APIs/API";
 import './style.css';
 
-const initialState = {
-  isSigned: false,
-	news: [],
-	topic: "",
-	headlines: true,
-	// country: "",
-};
-
 class Home extends Component {
   constructor() {
     super();
-	  this.state = initialState;
+	  this.state = {
+			news: [],
+			topic: "",
+			headlines: true,
+		};
 	};
 
 	newsSearch = () => {
@@ -113,36 +109,32 @@ class Home extends Component {
 			justifyContent: "flex-start",
 		};
 
-		console.log(this.state.headlines)
-
 		return (
 
 			<div>
 
-			<Header>
-			<ProfileIcon/>
-			</Header>
+				<Header>
+					<ProfileIcon/>
+				</Header>
+
 
 				<Row>
 
-					<Col xs={12}>
+					<Col>
 
-						<div id="jumboBox">
-
-							<div className="vertAlign">
-								<p id="scrap"> SCRAP </p>
-								<h5 id="scrap2">A Site For Your News</h5>
-							</div>
-
+						<div className="vertAlign">
+							<p id="scrap"> SCRAP </p>
+							<p class="scrap2">A Site For Your News</p>
 						</div>
 
 					</Col>
 		
 				</Row>
 
+
 				<Row>
 
-					<Col xs={12}>
+					<Col>
 
 						<form style={newsButtonStyle}>
 
@@ -201,9 +193,10 @@ class Home extends Component {
 				
 				</Row>
 
-					<Row>
+				
+				<Row>
 
-					<Col xs={12}>
+					<Col>
 
 					{this.state.news.length === 0
 						?
