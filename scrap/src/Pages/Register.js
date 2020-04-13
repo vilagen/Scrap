@@ -47,7 +47,10 @@ class SignUp extends Component {
 					password2: this.state.password2,
 				})
 			})
-			.then( res => res.json())
+			.then( res => {
+				console.log(res);
+				res.json()
+			})
 			.then( data => {
 				console.log(data)
 				if (data.success === 'true' && data.userId) {
@@ -63,7 +66,7 @@ class SignUp extends Component {
 					.then( user => {
 						if(user && user.email) {
 							alert("Sign up was successful!")
-							this.props.userSignIn("true");
+							this.props.userRegister("true");
 							this.setState({ redirect: "/"})
 						};
 					});

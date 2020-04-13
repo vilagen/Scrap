@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Button } from 'reactstrap';
 import './index.css';
 
 export function NewsList({children}) {
@@ -14,7 +14,11 @@ export function NewsListItem({
   image,
   description,
   url,
-  published,
+	published,
+	allowSave,
+	allowDelete,
+	onSave,
+	onDelete
 }) {
 	return (
 
@@ -33,6 +37,20 @@ export function NewsListItem({
 					<a className="btn btn-primary mx-1 my-2"
 					style={{height: "40px"}}
 					href={url}>Story</a>
+
+					{allowSave && <Button 
+						onClick={onSave} 
+						color="success" 
+						>
+						Save
+						</Button>	
+					}
+
+					{allowDelete && <Button
+						onClick={onDelete}
+						color="danger"
+						text="Delete"
+					/>}
 				
 				</div>
 

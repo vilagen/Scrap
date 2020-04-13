@@ -18,6 +18,41 @@ class App extends Component {
     };
   };
 
+  // componentDidMount() {
+  //   const token = window.sessionStorage.getItem('token');
+  //   console.log(token);
+  //   if (token) {
+  //     fetch('http://localhost:3001/signin', {
+  //       method: 'post',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': token // usually use 'Bearer ' + token
+  //       }
+  //     })
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       if (data && data.id) {
+  //         fetch(`http://localhost:3001/profile/${data.id}`, {
+  //           method: 'get',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             'Authorization': token
+  //           }
+  //         })
+  //         .then(res => res.json())
+  //         .then(user => {
+  //           if (user && user.email) {
+  //             console.log(user)
+  //             this.loadUser(user)
+  //             this.onRouteChange('home');
+  //           }
+  //         })
+  //       }
+  //     })
+  //     .catch(console.log("Don't have token or failed to work properly."));
+  //   }
+  // }
+
   userSignIn = (verify) => {
     if (verify === "true") {
       this.setState({isSignedIn: true});
@@ -35,9 +70,11 @@ class App extends Component {
           <div>
 
             <Switch>
-              <Route exact path = "/" component ={Home} />
+              <Route exact path = "/">
+                <Home isSignedIn={this.state.isSignedIn}/>
+              </Route>
               <Route exact path ="/register">
-                <Register userSignIn={this.userSignIn}/>
+                <Register userRegister={this.userSignIn}/>
               </Route>
             </Switch>
 

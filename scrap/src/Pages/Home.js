@@ -7,8 +7,8 @@ import API from "../APIs/API";
 import './style.css';
 
 class Home extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 	  this.state = {
 			news: [],
 			topic: "",
@@ -86,10 +86,6 @@ class Home extends Component {
 			.catch(err => console.log(err));
 	}
 
-	consoleThis = () => {
-		console.log(this.state.news);
-  }
-  
 	render() {
 
 		const newsButtonStyle = {
@@ -108,6 +104,8 @@ class Home extends Component {
 			flexDirection: "column",
 			justifyContent: "flex-start",
 		};
+
+		(console.log(this.props.isSignedIn))
 
 		return (
 
@@ -215,6 +213,8 @@ class Home extends Component {
 								description={stories.description}
 								url={stories.url}
 								published={stories.published}
+								allowSave={this.props.isSignedIn}
+								OnSave={() => alert("This is a test.")}
 								/>
 							)
 						)};
