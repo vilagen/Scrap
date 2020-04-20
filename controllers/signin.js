@@ -22,7 +22,7 @@ const handleSignin = (req, res, err) => {
 
     // check if user is in database
     if(err) {return res.json(`Error signing in while finding user. \n ${err}`)};
-    if(!login) {return res.json(`Error; cannot find username. \n ${err}`)};
+    if(!login) {return res.json(`Cannot find username.`)};
 
     // check to validate password and get user table data.
     const isValid = bcrypt.compareSync(password, login.password);
