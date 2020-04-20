@@ -9,49 +9,67 @@ import './App.css';
 //   isSignedIn: false,
 // };
 
+const initialState = {
+  isSignedIn: false,
+  user: {
+    id: '',
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    savedEntries: '',
+    joined: '',
+  }
+}
+
 class App extends Component {
 
   constructor() {
     super();
-    this.state = {
-      isSignedIn: false
-    };
+    this.state = initialState
   };
 
-  // componentDidMount() {
-  //   const token = window.sessionStorage.getItem('token');
-  //   console.log(token);
-  //   if (token) {
-  //     fetch('http://localhost:3001/signin', {
-  //       method: 'post',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': token // usually use 'Bearer ' + token
-  //       }
-  //     })
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       if (data && data.id) {
-  //         fetch(`http://localhost:3001/profile/${data.id}`, {
-  //           method: 'get',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //             'Authorization': token
-  //           }
-  //         })
-  //         .then(res => res.json())
-  //         .then(user => {
-  //           if (user && user.email) {
-  //             console.log(user)
-  //             this.loadUser(user)
-  //             this.onRouteChange('home');
-  //           }
-  //         })
-  //       }
-  //     })
-  //     .catch(console.log("Don't have token or failed to work properly."));
-  //   }
-  // }
+ async componentDidMount() {
+    const token = window.sessionStorage.getItem('token');
+    console.log(token);
+		await token
+    if (token) {
+			fetch('/api/signin', {
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': token // usually use 'Bearer ' + token
+				}
+			})
+			.then(res => res.json())
+			.then(data => {
+				if (data && data.id) {
+					fetch(`/api/profile/${data.id}`, {
+						method: 'get',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': token
+						}
+					})
+					.then(res => res.json())
+					.then(user => {
+						if (user && user.username) {
+							console.log(user);
+							this.setState({
+                isSignedIn: true,
+                id: user.id,
+                firstName: user.first_name,
+                lastName: user.last_name,
+                username: user.username,
+                email: user.email,
+                savedEntries: user.saved_entries});
+						};
+					});
+				};
+			})
+			.catch(console.log("Don't have token or failed to work properly."));
+		}
+  }
 
   userSignIn = (verify) => {
     if (verify === "true") {
@@ -71,11 +89,22 @@ class App extends Component {
 
             <Switch>
               <Route exact path = "/">
-                <Home isSignedIn={this.state.isSignedIn}/>
+                <Home isSignedIn={this.state.isSignedIn} />
               </Route>
               <Route exact path ="/register">
                 <Register userRegister={this.userSignIn}/>
               </Route>
+              <Route exact path ="/profile">
+                <UserPage 
+                  isSignedIn={this.state.isSignedIn}
+                  id={this.state.id}
+                  firstName={this.state.firstName}
+                  lastName={this.state.lastName}
+                  username={this.state.username}
+                  email={this.state.email}
+                  savedEntries={this.state.savedEntries}
+                />
+              </Route>"
             </Switch>
 
           </div>

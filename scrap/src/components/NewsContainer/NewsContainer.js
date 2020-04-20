@@ -38,8 +38,10 @@ export function NewsListItem({
 					style={{height: "40px"}}
 					href={url}>Story</a>
 
-					{allowSave && <Button 
-						onClick={onSave} 
+					{allowSave && <Button
+						className="mx-1 my-2" 
+						onClick={onSave}
+						style={{height: "40px"}} 
 						color="success" 
 						>
 						Save
@@ -67,7 +69,7 @@ export function NewsListItem({
 					<div id="border"></div>
 	
 					<Col xs="4" sm="2">
-						<img className="test m-3" src={image} alt=""/>
+						<img className="imageContainer m-3" src={image} alt=""/>
 					</Col>
 	
 					<Col xs="8" sm="10">

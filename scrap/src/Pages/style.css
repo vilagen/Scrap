@@ -1,5 +1,6 @@
-.height {
-  height: 50em
+.imageContainer {
+  width: 100%;
+  height: auto;
 }
 
 .centerPage {
@@ -9,11 +10,17 @@
   align-items: center;
 }
 
+.displayCenter{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .scrap2 {
   font-family: 'ZCOOL XiaoWei', serif;
   font-size: 25px;
   color: white;
-
 }
 
 .spaceBetweenDiv {
@@ -21,11 +28,19 @@
   justify-content: space-between;
 }
 
-.topPage{
+.userPageInfoDark{
+  height: 15rem;
+  background-color: black;
+  color: white;
+  font-size: 22px;
+}
+
+.spaceBetweenDiv{
   display: flex;
-  justify-content: flex-end;
-  vertical-align: text-top;
-  padding: 10px 30px 0 0;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* justify-content: space-around; */
+  align-items: center;
 }
 
 .vertAlign {
@@ -60,7 +75,4 @@
   color: white;
 }
 
-
-
 .buttonGray:hover {background-color: #e7e7e7;}
-

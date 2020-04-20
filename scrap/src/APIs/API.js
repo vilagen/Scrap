@@ -23,30 +23,37 @@ export default {
 	},
 
 	startSession: (token) => {
-		axios.post("api/signin", {
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': token
-			}
-		})
-		.then( res => res.json())
-		.then( data => {
-			if(data && data.userId) {
-				axios.get(`api/profile/${data.userId}`, {
-					headers: {
-						'Content-Type': 'application/json',
-						'Authorization': token
-					}
-				})
-				.then(res => res.json())
-				.then(user => {
-					if( user && user.username) {
-						return user.json()
-					}
-				})
-			}
-		})
-	}
+		return (
+			axios({
+				method: "post",
+				url: "api/signin",
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': token
+				}
+			})
+			.then( response => response.json())
+			.then( data => {
+				console.log(`This is a test ${data}`)
+				if(data && data.userId) {
+					axios({
+						method: "get",
+						url: `api/profile/${data.userId}`, 
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': token
+						}
+					})
+					.then(res => res.json())
+					.then(user => {
+						if( user && user.username) {
+							return user.json()
+						};
+					});
+				};
+			})
+		);
+	},
 
 	// userRegister: (req, res, err) => {
 	// 	return axios.post(`api/register`)

@@ -14,23 +14,51 @@
 // export default Profile;
 
 import React, { useState } from 'react';
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import "./style.css";
 
 const Example = (props) => {
 
+  const {
+    className
+  } = props;
+
   const [dropdownOpen, setOpen] = useState(false);
+  
+  const [modal, setModal] = useState(false);
 
   const toggle = () => setOpen(!dropdownOpen);
 
+  const toggleModal = () => setModal(!modal);
+
+  const closeBtn = <button className="close" onClick={toggleModal}>&times;</button>
+
+  console.log(modal)
+
   return (
-    <ButtonDropdown isOpen={dropdownOpen} toggle={toggle}>
+    <Dropdown isOpen={dropdownOpen} toggle={toggle}>
       <DropdownToggle caret>
-        <img src="./images/defUserImage.jpg" className="defaultImage" alt="userImage"/>
+        <img src="./images/defUserImage.jpg" className="defaultImage" alt="userImage" {...props}/>
       </DropdownToggle>
       <DropdownMenu right>
-        <DropdownItem>Signin</DropdownItem>
+        <DropdownItem>
+        <p onClick={toggleModal}>Signin</p>
+        <Modal isOpen={modal} toggle={toggleModal} className={className}>
+          <ModalHeader toggle={toggleModal} close={closeBtn}>Modal title</ModalHeader>
+          <ModalBody>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+            mollit anim id est laborum.
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={toggleModal}>Do Something</Button>{' '}
+            <Button color="secondary" onClick={toggleModal}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
+        </DropdownItem>
         <DropdownItem>
           <Link to={"/register"}>
           Register
@@ -40,7 +68,7 @@ const Example = (props) => {
         <DropdownItem divider />
         <DropdownItem>Signout</DropdownItem>
       </DropdownMenu>
-    </ButtonDropdown>
+    </Dropdown>
   );
 }
 

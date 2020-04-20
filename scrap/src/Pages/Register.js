@@ -47,10 +47,7 @@ class SignUp extends Component {
 					password2: this.state.password2,
 				})
 			})
-			.then( res => {
-				console.log(res);
-				res.json()
-			})
+			.then( res => res.json())
 			.then( data => {
 				console.log(data)
 				if (data.success === 'true' && data.userId) {
@@ -78,6 +75,7 @@ class SignUp extends Component {
 		};
 	};
 
+
 	// handleRegister = (username, email, password, password2) => {
 
 	// }
@@ -99,6 +97,9 @@ class SignUp extends Component {
 						<CardBody>
 
 							<Form>
+
+								<h4>Register</h4>
+								<br></br>
 
 								<FormGroup controlId="formBasicEmail">
 									<Label className="d-flex justify-content-start">Username</Label>

@@ -62,7 +62,7 @@ const getAuthTokenId = (req, res) => {
   const { authorization } = req.headers;
   return redisClient.get(authorization, (err, reply) => {
     console.log(reply)
-    if (err || !replay) {
+    if (err || !reply) {
       return res.status(400).json("Unauthorized.")
     }
     return res.json({id: reply})

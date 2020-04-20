@@ -16,38 +16,25 @@ class Home extends Component {
 		};
 	};
 
+	
+	//this doesn't seem to work, was just chekcing out XML requests.
+	// newsSearchTest = () => {
+	// 	const xhr = new XMLHttpRequest();
+
+	// 	xhr.open('GET', '/api/currentnews', false)
+	// 	xhr.onload = () => {
+	// 		if(request.status >= 200 && request.status < 400) {
+	// 			this.setState({news: xhr.responseText, done: true})
+	// 		}
+	// 	};
+	// 	xhr.send();
+	// }
+
 	newsSearch = () => {
 		API.newsSearch()
 		.then( res => this.setState({news: res.data}))
 			.catch(err => console.log(err));
 	};
-
-	// userNewsSearchSubmit = (event) => {
-	// 	event.preventDefault();
-	// 	API.userNewsSearch(this.state.topic, this.state.country)
-	// 		.then( ( { data: {items} } ) => {
-	// 			let newArray = items
-	// 			if(newArray === undefined) {
-	// 				newArray = [];
-	// 			}
-	// 			this.setState({ news: newArray })
-	// 		})
-	// 	.catch( err => console.log(err));
-	// 	console.log(this.state.news);
-	// };
-
-	// <label htmlFor="country">Country</label>
-	// <input 
-	// className="mx-2" 
-	// name="country"
-	// type="text" 
-	// id="topic"
-	// value={this.state.country}
-	// aria-describedby="newsCountry"
-	// onChange={this.handleInputChange}
-	// onSubmit={this.userNewsSearchSubmit}
-	// placeholder="USA, Canada, Iceland, Chad, etc" 
-	// />
 
 	userNewsSearchSubmit = (event) => {
 		event.preventDefault();
@@ -66,13 +53,6 @@ class Home extends Component {
 		console.log(this.state.topic)
 	};
 
-	// handleOptionChange = event => {
-	// 	this.setState({
-	// 			headlines: event.target.value 
-	// 	});
-	// 	console.log(this.state.headlines)
-	// };
-
 	handleOptionChange2 = () => {
 		this.setState(prevState => ({
 			headlines: !prevState.headlines
@@ -81,10 +61,15 @@ class Home extends Component {
 	};
 
 	async componentDidMount() {
-		await API.newsSearch()
-		.then( res => this.setState({news: res.data}))
-			.catch(err => console.log(err));
-	}
+		// await API.newsSearch()
+		// .then( res => this.setState({news: res.data}))
+		// .catch(err => console.log(err));
+
+		await fetch("api/currentnews")
+		.then(res => res.json())
+		.then( res => this.setState({news: res}))
+		.catch(err => console.log(err));
+	};
 
 	render() {
 
