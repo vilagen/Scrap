@@ -97,7 +97,7 @@ class Home extends Component {
 			<div>
 
 				<Header>
-					<ProfileIcon/>
+					<ProfileIcon userSignedIn={this.props.userSignedIn} />
 				</Header>
 
 

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import {Container, Row, Col, Media} from "reactstrap";
-import Header from "../components/Header/Header";
+import {Container, Row, Col} from "reactstrap";
+// import Header from "../components/Header/Header";
 import ProfileIcon from "../components/Profile/ProfileIcon";
 import "./style.css";
 

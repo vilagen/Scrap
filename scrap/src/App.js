@@ -68,7 +68,9 @@ class App extends Component {
 				};
 			})
 			.catch(console.log("Don't have token or failed to work properly."));
-		}
+		} else {
+      this.setState({ isSignedIn: false});
+    }
   }
 
   userSignIn = (verify) => {
@@ -89,7 +91,7 @@ class App extends Component {
 
             <Switch>
               <Route exact path = "/">
-                <Home isSignedIn={this.state.isSignedIn} />
+                <Home isSignedIn={this.state.isSignedIn} userSignedIn={this.userSignIn} />
               </Route>
               <Route exact path ="/register">
                 <Register userRegister={this.userSignIn}/>
