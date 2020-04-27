@@ -6,6 +6,12 @@ export function NewsList({children}) {
   return <ul className="list-group">{children}</ul>
 };
 
+const textStyling = {
+	fontFamily:' "ZCOOL XiaoWei", "serif"',
+  fontSize: "20px",
+  color: "black",
+}
+
 // info will come from a JSON file
 export function NewsListItem({
   source,
@@ -32,7 +38,9 @@ export function NewsListItem({
 				<div className="d-flex justify-content-between"
 				style={{backgroundColor:"black"}}>
 
-					<h4 className="mx-1 my-2 text-white">{title}</h4>
+					<h4 className="ml-2 my-2 text-white" style={{maxWidth:"850px"}}>{title}</h4>
+
+					<span>
 
 					<a className="btn btn-primary mx-1 my-2"
 					style={{height: "40px"}}
@@ -53,16 +61,18 @@ export function NewsListItem({
 						color="danger"
 						text="Delete"
 					/>}
+
+					</span>
 				
 				</div>
 
-				<div className="d-flex justify-content-between">
+				<span className="d-flex justify-content-between">
 
-							<p>{author}</p>
+							<p className="mx-2" style={textStyling}> Author(s) {author} </p>
 
-							<p>{published}</p>
+							<p className="mx-2" style={textStyling}> Published by: {published} </p>
 
-				</div>
+				</span>
 	
 				<Row>
 

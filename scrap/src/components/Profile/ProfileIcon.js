@@ -11,7 +11,7 @@ class ProfileIcon extends Component {
     super(props);
     this.state ={
       dropdownOpen: false,
-      modal: false,
+      // modal: false,
       username: '',
       password: '',
       registerError: '',
@@ -19,19 +19,17 @@ class ProfileIcon extends Component {
     };
   };
 
-  toggle = () => {
+  toggleDropDown = () => {
     this.setState(prevState => ({
       dropdownOpen: !prevState.dropdownOpen
     }));
-    console.log(this.state.dropdownOpen);
   };
 
-  toggleModal = () => {
-    this.setState(prevState => ({
-      modal: !prevState.modal
-    }));
-    console.log(this.state.modal);
-  };
+  // toggleModal = () => {
+  //   this.setState(prevState => ({
+  //     modal: !prevState.modal
+  //   }));
+  // };
 
   closeBtn = <button className="close" onClick={this.toggleModal}>&times;</button>
 
@@ -40,9 +38,8 @@ class ProfileIcon extends Component {
 		this.setState({
 				[name]: value
 		});
-		console.log(this.state.topic)
-	};
-
+  };
+  
   saveAuthTokenInSession = (token) => {
     // window.localStorage.setItem('token', token) // session/local storage is a way to save information on the browser. It uses key, value ('token', token in this case)
     window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
@@ -77,16 +74,27 @@ class ProfileIcon extends Component {
 					.then( user => {
 						if(user && user.email) {
               alert("Sign in was successful!")
-              this.props.userSignedIn(true)
-            };
-            this.toggleModal()
-					});
+              this.props.userSignedIn(true);
+              fetch("api/currentnews")
+              .then(res => res.json())
+              .then( res => this.props.signinNews(res))
+              console.log(this.props.news);
+          }})
 				} else {
 					alert(data)
 				}
 			});
 		};
   };
+
+  // onSubmitRegister = (event) => {
+	// 	event.preventDefault();
+	// 	if (this.state.username === "" || this.state.password === "") {
+	// 		alert("Missing username or password.")
+	// 	} else {
+	// 	  this.toggleModal()
+	// 	};
+  // };
   
   signOutUser = (event) => {
     event.preventDefault();
@@ -100,9 +108,10 @@ class ProfileIcon extends Component {
     });
     window.sessionStorage.removeItem('token');
     this.props.userSignedIn(false)
-    this.toggle()
-    // this.setState({ redirect: "/"})
+    this.toggleDropDown();
   };
+
+
 
   render() {
 
@@ -111,48 +120,15 @@ class ProfileIcon extends Component {
 		}
 
     return (
-
-      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropDown}>
         <DropdownToggle caret>
           <img src="./images/defUserImage.jpg" className="defaultImage" alt="userImage"/>
         </DropdownToggle>
         <DropdownMenu right>
           <DropdownItem>
-          <span onClick={this.toggleModal}>Signin</span>
-          <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-            <ModalHeader toggle={this.toggleModal} close={this.closeBtn}>Modal title</ModalHeader>
-            <ModalBody>
-              <Form>
-                <h4>Signin</h4>
-                <br></br>
-                <FormGroup controlId="formBasicEmail">
-                  <Label className="d-flex justify-content-start">Username</Label>
-                  <Input
-                  name="username"
-                  type="text"
-                  value={this.state.username} 
-                  placeholder="Username"
-                  onChange={this.handleInputChange}
-                  />
-                </FormGroup>
-
-                <FormGroup controlId="formBasicPassword">
-                  <Label className="d-flex justify-content-start">Password</Label>
-                  <Input 
-                  name="password"
-                  type="password" 
-                  value={this.state.password}
-                  placeholder="Password"
-                  onChange={this.handleInputChange}
-                  />
-                </FormGroup>
-              </Form>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={this.onSubmitRegister}>Signin</Button>{' '}
-              <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
-            </ModalFooter>
-          </Modal>
+          <Link to={"/login"}>
+            Login
+          </Link>
           </DropdownItem>
           <DropdownItem>
             <Link to={"/register"}>
@@ -161,7 +137,7 @@ class ProfileIcon extends Component {
           </DropdownItem>
           <DropdownItem>Profile</DropdownItem>
           <DropdownItem divider />
-          <DropdownItem onClick={this.signOutUser}>
+          <DropdownItem onClick={this.signOutUser} toggle={false}>
             Signout
           </DropdownItem>
         </DropdownMenu>

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from './Pages/Home'
 import Register from './Pages/Register'
+import Login from './Pages/Login';
 import UserPage from './Pages/UserPage';
 import './App.css';
 
@@ -19,8 +20,9 @@ const initialState = {
     email: '',
     savedEntries: '',
     joined: '',
+    // modal: false,
   }
-}
+};
 
 class App extends Component {
 
@@ -80,6 +82,7 @@ class App extends Component {
       this.setState({isSignedIn: false});
     }
   };
+  
 
   render () {
     console.log(this.state.isSignedIn);
@@ -95,6 +98,9 @@ class App extends Component {
               </Route>
               <Route exact path ="/register">
                 <Register userRegister={this.userSignIn}/>
+              </Route>
+              <Route exact path ="/login">
+                <Login userSignin={this.userSignIn}/>
               </Route>
               <Route exact path ="/profile">
                 <UserPage 

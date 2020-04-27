@@ -3,16 +3,14 @@ import { Button, Form, FormGroup, Label, Input, Card, CardBody } from "reactstra
 import { Link, Redirect } from "react-router-dom";
 import './style.css';
 
-class SignUp extends Component {
+class Login extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
 			username: "",
-			email: "",
 			password: "",
-			password2: "",
-			registerError: "",
+			signinError: "",
 			redirect: null,
 		};
 	};
@@ -30,26 +28,21 @@ class SignUp extends Component {
     window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
   }
 
-	onSubmitRegister = (event) => {
+  onSubmitLogin= (event) => {
 		event.preventDefault();
-		if (this.state.username === "" || this.state.email === "" || this.state.password === "" || this.state.password2 === "") {
-			alert("All fields must be filled out.")
-		} else if (this.state.password !== this.state.password2) {
-			alert("Passwords do not match.")
+		if (this.state.username === "" || this.state.password === "") {
+			alert("Missing username or password.")
 		} else {
-			fetch('/api/register', {
+			fetch('/api/signin', {
 				method: "post",
 				headers: {"Content-Type": "application/json"},
 				body: JSON.stringify({
 					username: this.state.username,
-					email: this.state.email,
 					password: this.state.password,
-					password2: this.state.password2,
 				})
 			})
 			.then( res => res.json())
 			.then( data => {
-				console.log(data)
 				if (data.success === 'true' && data.userId) {
 				this.saveAuthTokenInSession(data.token)
 					fetch(`/api/profile/${data.userId}`, {
@@ -62,23 +55,17 @@ class SignUp extends Component {
 					.then(res => res.json())
 					.then( user => {
 						if(user && user.email) {
-							alert("Registeration was successful!")
-							this.props.userRegister("true");
-							this.setState({ redirect: "/"})
-						};
-					});
+              alert("Sign in was successful!")
+              this.props.userSignin("true");
+              this.setState({ redirect: "/"})
+            }
+          })
 				} else {
-					this.setState({registerError: data.error})
-					alert(this.state.registerError);
+					alert(data)
 				}
 			});
 		};
-	};
-
-
-	// handleRegister = (username, email, password, password2) => {
-
-	// }
+  };
 
 	render() {
 
@@ -98,7 +85,7 @@ class SignUp extends Component {
 
 							<Form>
 
-								<h4>Register</h4>
+								<h4>Login</h4>
 								<br></br>
 
 								<FormGroup controlId="formBasicEmail">
@@ -108,17 +95,6 @@ class SignUp extends Component {
 									type="text" 
 									placeholder="Username"
 									value={this.state.username}
-									onChange={this.handleInputChange}
-									/>
-								</FormGroup>
-
-								<FormGroup controlId="formBasicEmail">
-									<Label className="d-flex justify-content-start">Email address</Label>
-									<Input 
-									name="email"
-									type="email" 
-									placeholder="Email"
-									value={this.state.email}
 									onChange={this.handleInputChange}
 									/>
 								</FormGroup>
@@ -134,22 +110,11 @@ class SignUp extends Component {
 									/>
 								</FormGroup>
 
-								<FormGroup controlId="formBasicPassword">
-									<Label className="d-flex justify-content-start">Password</Label>
-									<Input 
-									name="password2"
-									type="password" 
-									placeholder="Password" 
-									value={this.state.password2}
-									onChange={this.handleInputChange}
-									/>
-								</FormGroup>
-
 								<div>
 									<Button 
 									variant="primary" 
 									type="submit"
-									onClick={this.onSubmitRegister}
+									onClick={this.onSubmitLogin}
 									>
 										Submit
 									</Button>
@@ -184,4 +149,4 @@ class SignUp extends Component {
 
 };
 
-export default SignUp;
+export default Login;

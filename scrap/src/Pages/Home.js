@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Row, Col } from "reactstrap";
-import Header from "../components/Header/Header";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, 
+				 Form, FormGroup, Label, Input } from "reactstrap";
 import ProfileIcon from "../components/Profile/ProfileIcon";
 import { NewsList, NewsListItem } from "../components/NewsContainer/NewsContainer";
 import API from "../APIs/API";
@@ -13,10 +13,12 @@ class Home extends Component {
 			news: [],
 			topic: "",
 			headlines: true,
+			modal: false,
+			username: "",
+			password: "",
 		};
 	};
 
-	
 	//this doesn't seem to work, was just chekcing out XML requests.
 	// newsSearchTest = () => {
 	// 	const xhr = new XMLHttpRequest();
@@ -71,6 +73,61 @@ class Home extends Component {
 		.catch(err => console.log(err));
 	};
 
+	toggleModal = () => {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
+	};
+	
+	saveAuthTokenInSession = (token) => {
+    // window.localStorage.setItem('token', token) // session/local storage is a way to save information on the browser. It uses key, value ('token', token in this case)
+    window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
+  }
+
+  onSubmitRegister = (event) => {
+		event.preventDefault();
+		if (this.state.username === "" || this.state.password === "") {
+			alert("Missing username or password.")
+		} else {
+			fetch('/api/signin', {
+				method: "post",
+				headers: {"Content-Type": "application/json"},
+				body: JSON.stringify({
+					username: this.state.username,
+					password: this.state.password,
+				})
+			})
+			.then( res => res.json())
+			.then( data => {
+				console.log(data)
+				if (data.success === 'true' && data.userId) {
+				this.saveAuthTokenInSession(data.token)
+					fetch(`/api/profile/${data.userId}`, {
+						method: 'get',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': data.token,					
+						}
+					})
+					.then(res => res.json())
+					.then( user => {
+						if(user && user.email) {
+              alert("Sign in was successful!")
+              this.props.userSignedIn(true);
+              fetch("api/currentnews")
+              .then(res => res.json())
+							.then( res => this.setState({news: res}))
+							console.log(this.state.news)
+							this.toggleModal();
+						}
+					})
+				} else {
+					alert(data)
+				}
+			});
+		};
+  };
+
 	render() {
 
 		const newsButtonStyle = {
@@ -79,115 +136,120 @@ class Home extends Component {
 			flexDirection: "row",
 			justifyContent: "center",
 			alignItems: "center",
-			// textAlign: "center",
 			backgroundColor: "yellow",
 		};
 		
 		const radioButtonStyle = {
-			// borderStyle: "solid",
 			display: "flex",
 			flexDirection: "column",
 			justifyContent: "flex-start",
 		};
 
-		(console.log(this.props.isSignedIn))
+		console.log(this.state.news)
 
 		return (
 
 			<div>
+			
+				<div className="vertAlign3">
+					<span className="picPosition"><ProfileIcon userSignedIn={this.props.userSignedIn} toggleModal={this.toggleModal}/></span>
+					<p id="scrap"> SCRAP </p>
+					<p className="scrap2">A Site For Your News</p>
+				</div>
 
-				<Header>
-					<ProfileIcon userSignedIn={this.props.userSignedIn} />
-				</Header>
+				<Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+				<ModalHeader toggle={this.toggleModal} close={this.closeBtn}>Modal title</ModalHeader>
+				<ModalBody>
+					<Form>
+						<h4>Signin</h4>
+						<br></br>
+						<FormGroup controlId="formBasicEmail">
+							<Label className="d-flex justify-content-start">Username</Label>
+							<Input
+							name="username"
+							type="text"
+							value={this.state.username} 
+							placeholder="Username"
+							onChange={this.handleInputChange}
+							/>
+						</FormGroup>
 
+						<FormGroup controlId="formBasicPassword">
+							<Label className="d-flex justify-content-start">Password</Label>
+							<Input 
+							name="password"
+							type="password" 
+							value={this.state.password}
+							placeholder="Password"
+							onChange={this.handleInputChange}
+							/>
+						</FormGroup>
+					</Form>
+				</ModalBody>
+				<ModalFooter>
+					<Button color="primary" onClick={this.onSubmitRegister}>Signin</Button>{' '}
+					<Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
+				</ModalFooter>
+			</Modal>
 
-				<Row>
+				<form style={newsButtonStyle}>
 
-					<Col>
+					<label htmlFor="topic">Topic: </label>
+					<input
+					className="mx-2" 
+					name="topic"
+					type="text" 
+					id="topic"
+					value={this.state.topic}
+					aria-describedby="newsTopic"
+					onChange={this.handleInputChange}
+					onSubmit={this.userNewsSearchSubmit}
+					placeholder="Politics, Sports, Technology, etc"
+					/>
 
-						<div className="vertAlign">
-							<p id="scrap"> SCRAP </p>
-							<p class="scrap2">A Site For Your News</p>
+					<div className="mx-2">
+
+						<div className="radio" style={radioButtonStyle}>
+							<label className="headlineRadio" htmlFor="headlineRadio">
+								<input 
+								type="radio" 
+								name="headlines" 
+								value={true}
+								onChange={this.handleOptionChange2}
+								/>
+								Headlines
+							</label>
 						</div>
 
-					</Col>
-		
-				</Row>
+						<div className="radio" style={radioButtonStyle}>
+							<label className="headlineRadio" htmlFor="headlineRadio">
+								<input 
+								type="radio" 
+								name="headlines" 
+								value={false}
+								onChange={this.handleOptionChange2}
+								/>
+								Everything
+							</label>
+						</div>
 
+					</div>
 
-				<Row>
-
-					<Col>
-
-						<form style={newsButtonStyle}>
-
-							<label htmlFor="topic">Topic: </label>
-							<input
-							className="mx-2" 
-							name="topic"
-							type="text" 
-							id="topic"
-							value={this.state.topic}
-							aria-describedby="newsTopic"
-							onChange={this.handleInputChange}
-							onSubmit={this.userNewsSearchSubmit}
-							placeholder="Politics, Sports, Technology, etc"
-							/>
-
-							<div className="mx-2">
-
-								<div className="radio" style={radioButtonStyle}>
-									<label className="headlineRadio" htmlFor="headlineRadio">
-										<input 
-										type="radio" 
-										name="headlines" 
-										value={true}
-										// checked={this.state.headlines === "option1"}
-										onChange={this.handleOptionChange2}
-										/>
-										Headlines
-									</label>
-								</div>
-
-								<div className="radio" style={radioButtonStyle}>
-									<label className="headlineRadio" htmlFor="headlineRadio">
-										<input 
-										type="radio" 
-										name="headlines" 
-										value={false}
-										// checked={this.state.headlines === "option2"}
-										onChange={this.handleOptionChange2}
-										/>
-										Everything
-									</label>
-								</div>
-
-							</div>
-
-							<button style={{color:"dodgerblue"}}				
-							onClick={this.userNewsSearchSubmit}
-							>
-							Search
-							</button>
-						
-						</form>
-					
-					</Col>
+					<button style={{color:"dodgerblue"}}				
+					onClick={this.userNewsSearchSubmit}
+					>
+					Search
+					</button>
 				
-				</Row>
+				</form>
 
-				
-				<Row>
-
-					<Col>
-
-					{this.state.news.length === 0
-						?
-							<div>
-								<h1 id="scrap2" style={{textAlign:"center"}}>Sorry. There were no results.</h1>
-							</div>
-						: 
-						<NewsList>
+				{this.state.news.length === 0
+					?
+					<div>
+						<h1 id="scrap2" style={{textAlign:"center"}}>Sorry. There were no results.</h1>
+					</div>
+					: 
+					<NewsList>
 						{this.state.news.map( (stories, i) => (
 							<NewsListItem
 								key={i}
@@ -197,18 +259,14 @@ class Home extends Component {
 								image={stories.urlToImage}
 								description={stories.description}
 								url={stories.url}
-								published={stories.published}
+								published={stories.source.name}
 								allowSave={this.props.isSignedIn}
 								OnSave={() => alert("This is a test.")}
 								/>
 							)
 						)};
 					</NewsList>						
-					}
-
-					</Col>
-					
-				</Row>
+				}
 
 			</div>
 		)
@@ -216,29 +274,3 @@ class Home extends Component {
 }
 
 export default Home
-
-// <div className="radio" style={radioButtonStyle}>
-// <label className="headlineRadio">
-// 	<input 
-// 	type="radio" 
-// 	name="headlineRadio" 
-// 	value={true} 
-// 	checked={this.state.headlines === true}
-// 	onChange={this.handleOptionChange}
-// 	/>
-// 	Headlines
-// </label>
-// </div>
-
-// <div className="radio" style={radioButtonStyle}>
-// <label className="headlineRadio">
-// 	<input 
-// 	type="radio" 
-// 	name="headlineRadio" 
-// 	value={false} 
-// 	checked={this.state.headlines === false}
-// 	onChange={this.handleOptionChange}
-// 	/>
-// 	Everything
-// </label>
-// </div>
