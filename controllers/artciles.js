@@ -22,7 +22,6 @@ const saveArticle = (req, res, err) => {
 
 const deleteArticle = (req, res, err) => {
   const {id} = req.params;
-
   db.Article
   .findByPk(id)
   .then(dbArticle => dbArticle.destroy())

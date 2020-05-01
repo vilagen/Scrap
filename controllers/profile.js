@@ -1,12 +1,16 @@
 const db = require("../models");
 
 const handleProfileGet = (req, res, err) => {
-  db.User.findByPk(req.params.id).then( (user, err) => {
+  db.User.findOne(
+    {where: {
+      id: req.params.id
+    }, 
+    include: ['Articles']})
+    .then( (user, err) => {
     if(user) {
-      // console.log(id)
+      user["Articles"].forEach( x => console.log(x.title))
       return res.send(user)
     } else {
-      // console.log(id)
       res.status(400).json(`User not found. ${err}`)
     }  
   })
