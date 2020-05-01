@@ -3,6 +3,6 @@ const userArticles = require("../../controllers/artciles");
 
 // Matches with "api/articles"
 router.route("/")
-  .get(userArticles.getAuthTokenId);
+  .post(userArticles.saveArticle);
 
 module.exports = router;

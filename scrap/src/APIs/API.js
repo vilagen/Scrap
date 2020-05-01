@@ -22,6 +22,30 @@ export default {
 		};
 	},
 
+	saveArticle: (data) => {
+
+		console.log(data.token)
+
+		const newsItems = {
+			published: data.published,
+			author: data.author,
+			title: data.title,
+			image: data.image,
+			description: data.description,
+			url: data.url,
+		}
+
+		const headers = {
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': data.token
+			}
+		}
+
+		return axios.post(`/api/articles`, newsItems, headers);
+		
+	},
+
 	startSession: (token) => {
 		return (
 			axios({
@@ -54,6 +78,8 @@ export default {
 			})
 		);
 	},
+
+
 
 	// userRegister: (req, res, err) => {
 	// 	return axios.post(`api/register`)

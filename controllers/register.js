@@ -18,7 +18,7 @@ const handleRegister = (req, res, err) => {
     if(existingUser) {res.status(400).json({ error: `Username is already taken.` })}
     })
     .catch( error => {
-      if(error) {return `Error setting up new user. \n ${error}`}
+      if(error) {return `Error setting up new user. ${error}`}
     });
 
   db.User.findOne( {where: {username: username}} ).then( (err, existingUser) => {
@@ -26,7 +26,7 @@ const handleRegister = (req, res, err) => {
     else if(existingUser) {res.status(400).json({ error: `Username is already taken.` })}
     })
     .catch( error => {
-      if(error) {return `Error setting up new user. \n ${error}`}
+      if(error) {return `Error setting up new user. ${error}`}
     });
 
   const user = new db.User({

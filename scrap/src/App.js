@@ -112,7 +112,7 @@ class App extends Component {
                   email={this.state.email}
                   savedEntries={this.state.savedEntries}
                 />
-              </Route>"
+              </Route>
             </Switch>
 
           </div>

@@ -3,26 +3,34 @@ const redis = require("redis");
 
 const redisClient = redis.createClient(process.env.REDIS_URI);
 
-const getAuthTokenId = (req, res) => {
-  const { authorization } = req.headers;
-  return redisClient.get(authorization, (err, reply) => {
-    console.log(reply)
-    if (err || !reply) {
-      return res.status(400).json("Unauthorized.")
-    }
-    return res.json({id: reply})
-  }); 
-};
-
 const saveArticle = (req, res, err) => {
   const articles = req.body;
-  article.user_id
+  const { authorization } = req.headers;
+  console.log("saveArticle " + authorization);
+  if (authorization) {
+    return redisClient.get(authorization, (err, reply) => {
+      articles.UserId = reply
+      db.Article
+      .create(req.body)
+      .then( data => res.json(data))
+      .catch(err => res.status(422).josn("Error " + err))
+    });
+  } else {
+    return res.status(400).json("Unathorized; not able to save article.")
+  }
+};
+
+const deleteArticle = (req, res, err) => {
+  const {id} = req.params;
+
   db.Article
-  .create(req.body)
-  .then( data => res.json(data))
-  .catch(err => res.status(422).josn(""))
-}
+  .findByPk(id)
+  .then(dbArticle => dbArticle.destroy())
+  .then(dbArticle => res.json(dbArticle))
+  .catch(err => res.status(422).json(err));
+};
 
 module.exports = {
-  getAuthTokenId, saveArticle
-}
+  saveArticle, 
+  deleteArticle
+};

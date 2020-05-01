@@ -82,7 +82,27 @@ class Home extends Component {
 	saveAuthTokenInSession = (token) => {
     // window.localStorage.setItem('token', token) // session/local storage is a way to save information on the browser. It uses key, value ('token', token in this case)
     window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
-  }
+	}
+
+	// token = () => {
+	// 	window.sessionStorage.getItem('token');
+	// }
+	
+	onClickSaveArticle = (token, published, author, title, image, description, url) => {
+		API.saveArticle({
+			token,
+			published,
+			author,
+			title,
+			image,
+			description,
+			url
+		})
+		.then(res => {
+			alert("Article Saved.")
+			console.log(res)
+		})
+	}
 
   onSubmitRegister = (event) => {
 		event.preventDefault();
@@ -145,7 +165,7 @@ class Home extends Component {
 			justifyContent: "flex-start",
 		};
 
-		console.log(this.state.news)
+		console.log(sessionStorage.getItem('token'));
 
 		return (
 
@@ -253,7 +273,6 @@ class Home extends Component {
 						{this.state.news.map( (stories, i) => (
 							<NewsListItem
 								key={i}
-								source={stories.source.id}
 								author={stories.author}
 								title={stories.title}
 								image={stories.urlToImage}
@@ -261,12 +280,13 @@ class Home extends Component {
 								url={stories.url}
 								published={stories.source.name}
 								allowSave={this.props.isSignedIn}
-								OnSave={() => alert("This is a test.")}
+								onSave={() => this.onClickSaveArticle(sessionStorage.getItem('token'), stories.source.name, 
+								stories.author, stories.title, stories.urlToImage, stories.description, stories.url)}
 								/>
 							)
 						)};
 					</NewsList>						
-				}
+				};
 
 			</div>
 		)
