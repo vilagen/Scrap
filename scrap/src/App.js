@@ -20,6 +20,7 @@ const initialState = {
     email: '',
     savedEntries: '',
     joined: '',
+    articles: [],
     // modal: false,
   }
 };
@@ -64,7 +65,10 @@ class App extends Component {
                 lastName: user.last_name,
                 username: user.username,
                 email: user.email,
-                savedEntries: user.saved_entries});
+                savedEntries: user.saved_entries,
+                articles: user.Articles,
+              });
+              console.log(this.state.articles)
 						};
 					});
 				};
