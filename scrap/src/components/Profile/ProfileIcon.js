@@ -15,7 +15,7 @@ class ProfileIcon extends Component {
       username: '',
       password: '',
       registerError: '',
-      redirect: null,
+      // redirect: null,
     };
   };
 
@@ -107,11 +107,9 @@ class ProfileIcon extends Component {
       },
     });
     window.sessionStorage.removeItem('token');
-    this.props.userSignedIn(false)
+    this.props.userSignedIn(false);
     this.toggleDropDown();
   };
-
-
 
   render() {
 

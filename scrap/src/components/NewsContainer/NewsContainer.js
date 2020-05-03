@@ -10,7 +10,12 @@ const textStyling = {
 	fontFamily:' "ZCOOL XiaoWei", "serif"',
   fontSize: "20px",
   color: "black",
-}
+};
+
+const borderStyle = {
+	borderStyle:"solid",
+	borderColor: "#cccc00",
+};
 
 // info will come from a JSON file
 export function NewsListItem({
@@ -29,11 +34,13 @@ export function NewsListItem({
 	return (
 
 		<Container 
-		style={{borderStyle:"solid"}}
 		className="my-2"
 		>
 
-			<div className="my-2 bg-white" id="squareBorder">
+			<div 
+			className="my-2 bg-white"
+			style={borderStyle}
+			>
 
 				<div className="d-flex justify-content-between"
 				style={{backgroundColor:"black"}}>
@@ -42,7 +49,7 @@ export function NewsListItem({
 
 					<span>
 
-					<a className="btn btn-primary mx-1 my-2"
+					<a className="btn btn-primary mx-2 my-2"
 					style={{height: "40px"}}
 					href={url}>Story</a>
 
@@ -57,22 +64,18 @@ export function NewsListItem({
 					}
 
 					{allowDelete && <Button
+						className="mx-1 my-2" 
 						onClick={onDelete}
+						style={{height: "40px"}} 
 						color="danger"
-						text="Delete"
-					/>}
+					 >
+					 Delete
+					 </Button>
+					}
 
 					</span>
 				
 				</div>
-
-				<span className="d-flex justify-content-between">
-
-							<p className="mx-2" style={textStyling}> Author(s) {author} </p>
-
-							<p className="mx-2" style={textStyling}> Published by: {published} </p>
-
-				</span>
 	
 				<Row>
 
@@ -83,6 +86,14 @@ export function NewsListItem({
 					</Col>
 	
 					<Col xs="8" sm="10">
+					<span className="d-flex justify-content-between">
+
+					<p className="mx-2" style={textStyling}> Author(s) {author} </p>
+
+					<p className="mx-2" style={textStyling}> Published by: {published} </p>
+
+						</span>
+
 						<p>{description}</p>
 					</Col>
 	

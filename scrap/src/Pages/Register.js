@@ -64,7 +64,7 @@ class SignUp extends Component {
 						if(user && user.email) {
 							alert("Registeration was successful!")
 							this.props.userRegister("true");
-							this.setState({ redirect: "/"})
+							this.setState({ redirect: "/"});
 						};
 					});
 				} else {

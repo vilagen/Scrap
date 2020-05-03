@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link, Redirect } from "react-router-dom";
 import Home from './Pages/Home'
 import Register from './Pages/Register'
 import Login from './Pages/Login';
@@ -21,6 +21,7 @@ const initialState = {
     savedEntries: '',
     joined: '',
     articles: [],
+    redirect: null,
     // modal: false,
   }
 };
@@ -34,7 +35,6 @@ class App extends Component {
 
  async componentDidMount() {
     const token = window.sessionStorage.getItem('token');
-    console.log(token);
 		await token
     if (token) {
 			fetch('/api/signin', {
@@ -68,7 +68,6 @@ class App extends Component {
                 savedEntries: user.saved_entries,
                 articles: user.Articles,
               });
-              console.log(this.state.articles)
 						};
 					});
 				};
@@ -86,10 +85,16 @@ class App extends Component {
       this.setState({isSignedIn: false});
     }
   };
+
+  userSignOut = (signedOut) => {
+    if (signedOut === "true") {
+      this.setState( {redirect: "/"});
+    };
+  };
   
 
   render () {
-    console.log(this.state.isSignedIn);
+    console.log(this.state.articles);
     return (
       <div>
         <Router>
@@ -115,6 +120,7 @@ class App extends Component {
                   username={this.state.username}
                   email={this.state.email}
                   savedEntries={this.state.savedEntries}
+                  articles={this.state.articles}
                 />
               </Route>
             </Switch>

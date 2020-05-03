@@ -24,8 +24,6 @@ export default {
 
 	saveArticle: (data) => {
 
-		console.log(data.token)
-
 		const newsItems = {
 			published: data.published,
 			author: data.author,
@@ -44,6 +42,14 @@ export default {
 
 		return axios.post(`/api/articles`, newsItems, headers);
 		
+	},
+
+	deleteArticle: id => {
+
+		console.log(id);
+
+		// return axios.delete(`/api/articles/${id}`, headers)
+
 	},
 
 	startSession: (token) => {
@@ -85,4 +91,4 @@ export default {
 	// 	return axios.post(`api/register`)
 	// }
 
-}
+};
