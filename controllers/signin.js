@@ -21,7 +21,7 @@ const handleSignin = (req, res, err) => {
   return db.Login.findOne( {where: {username:username} }).then( (login, err) => {
 
     // check if user is in database
-    if(err) {return res.json(`Error signing in while finding user. \n ${err}`)};
+    if(err) {return res.json(`Error signing in while finding user. ${err}`)};
     if(!login) {return res.json(`Cannot find username.`)};
 
     // check to validate password and get user table data.
@@ -29,7 +29,7 @@ const handleSignin = (req, res, err) => {
     if (isValid) {
       return db.User.findOne( {where: {username:username} })
       .then(user => user) 
-      .catch(err => Promise.reject(`There was an error retrieving user. \n ${err}`));
+      .catch(err => Promise.reject(`There was an error retrieving user. ${err}`));
     } else if(!isValid) {
       Promise.reject("Password was incorrect.");
     }

@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import {Container, Row, Col} from "reactstrap";
+import { Link, Redirect } from "react-router-dom";
 import { NewsList, NewsListItem } from "../components/NewsContainer/NewsContainer";
 import ProfileIcon from "../components/Profile/ProfileIcon";
 import "./style.css";
+import API from "../APIs/API";
 
 // const initialState = {
 //   isSignedIn: false,
@@ -25,30 +27,34 @@ const profileSize= {
   borderRadius: "50px",
 };
 
-const onClickDelete = () => {
-  alert("This is a test");
-};
+const token = window.sessionStorage.getItem('token');
 
 class UserPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       id: '',
-      firstName: '',
-      lastName: '',
-      username: '',
-      email: '',
       savedEntries: '',
-      joined: '',
       userArticles: [],
       redirect: null,
       isSignedIn: false,
     }
   };
 
+  loadArticles = (token, id) => {
+    API.retrieveArticles(token, id)
+      .then(res => this.setState({ userArticles: res.data.Articles }))
+      .then(res => console.log(this.state.userArticles))
+      .catch(err => console.log(`There was an error retrieving articles. ${err}`));
+  };
+
+  onClickDelete = (token, id) => {
+    API.deleteArticle(token, id)
+      .then(res=> this.loadArticles(token, this.state.id))
+  };
+
   async componentDidMount() {
-    const token = window.sessionStorage.getItem('token');
-		await token
+    await token
     if (token) {
 			fetch('/api/signin', {
 				method: 'post',
@@ -72,16 +78,12 @@ class UserPage extends Component {
 						if (user && user.username) {
 							console.log(user);
 							this.setState({
-                isSignedIn: true,
                 id: user.id,
-                firstName: user.first_name,
-                lastName: user.last_name,
-                username: user.username,
-                email: user.email,
                 savedEntries: user.saved_entries,
                 userArticles: user.Articles,
               });
               console.log(this.state.userArticles)
+              this.loadArticles(token, this.state.id)
 						};
 					});
 				};
@@ -89,12 +91,17 @@ class UserPage extends Component {
 			.catch(console.log("Don't have token or failed to work properly."));
 		} else {
       this.setState({ isSignedIn: false});
+      this.setState({ redirect: "/"});
     }
   }
 
   render() {
 
-    console.log(this.props.articles)
+    // console.log(this.props.id)
+
+    if (this.state.redirect) {
+			return <Redirect to={this.state.redirect} />
+		}
 
     return (
 
@@ -118,6 +125,7 @@ class UserPage extends Component {
             <Col  md="4" sm="4" xs="4"
             className="displayCenter">
                 <ProfileIcon
+                userSignedIn={this.props.userSignedIn}
                 style={profileSize}/>
             </Col>
           
@@ -155,7 +163,7 @@ class UserPage extends Component {
                 url={stories.url}
                 published={stories.published}
                 allowDelete={this.props.isSignedIn}
-                onDelete={() => this.onClickDelete(stories.id)}
+                onDelete={() => this.onClickDelete(token, stories.id)}
                 />
               )
             )};

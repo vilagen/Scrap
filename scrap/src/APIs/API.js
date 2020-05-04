@@ -8,9 +8,6 @@ export default {
 	},
 
 	userNewsSearch: (topic, headlines) => {
-		// if( (!topic && !headlines) || (topic === undefined && headlines === undefined) ) {
-		//     return axios.get("/api/currentnews");
-		// }
 		if(!topic || topic === undefined) {
 			return axios.get(`api/currentnews`);
 		}
@@ -22,8 +19,15 @@ export default {
 		};
 	},
 
-	saveArticle: (data) => {
+	retrieveArticles: (token, id) => {
+		const headers = {
+			'Content-Type': 'application/json',
+			'Authorization': token
+		};
+		return axios.get(`api/profile/${id}`, headers);
+	},
 
+	saveArticle: (data) => {
 		const newsItems = {
 			published: data.published,
 			author: data.author,
@@ -31,25 +35,24 @@ export default {
 			image: data.image,
 			description: data.description,
 			url: data.url,
-		}
-
+		};
 		const headers = {
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': data.token
 			}
-		}
-
+		};
 		return axios.post(`/api/articles`, newsItems, headers);
-		
 	},
 
-	deleteArticle: id => {
-
-		console.log(id);
-
-		// return axios.delete(`/api/articles/${id}`, headers)
-
+	deleteArticle: (token, id) => {
+		const headers = {
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': token
+			}
+		};
+		return axios.delete(`/api/articles/${id}`, headers)
 	},
 
 	startSession: (token) => {

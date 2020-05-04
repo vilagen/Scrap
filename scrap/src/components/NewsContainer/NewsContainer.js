@@ -69,7 +69,7 @@ export function NewsListItem({
 						style={{height: "40px"}} 
 						color="danger"
 					 >
-					 Delete
+					  Delete
 					 </Button>
 					}
 

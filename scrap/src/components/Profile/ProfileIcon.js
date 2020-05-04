@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
-         Modal, ModalHeader, ModalBody, ModalFooter, 
-         Form, FormGroup, Label, Input} from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Link, Redirect } from "react-router-dom";
 import "./style.css";
 
@@ -136,7 +134,9 @@ class ProfileIcon extends Component {
           <DropdownItem>Profile</DropdownItem>
           <DropdownItem divider />
           <DropdownItem onClick={this.signOutUser} toggle={false}>
+            <Link to={"/"}>
             Signout
+            </Link>
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>

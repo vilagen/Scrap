@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { BrowserRouter as Router, Route, Switch, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from './Pages/Home'
 import Register from './Pages/Register'
 import Login from './Pages/Login';
@@ -20,7 +20,6 @@ const initialState = {
     email: '',
     savedEntries: '',
     joined: '',
-    articles: [],
     redirect: null,
     // modal: false,
   }
@@ -66,7 +65,6 @@ class App extends Component {
                 username: user.username,
                 email: user.email,
                 savedEntries: user.saved_entries,
-                articles: user.Articles,
               });
 						};
 					});
@@ -74,7 +72,16 @@ class App extends Component {
 			})
 			.catch(console.log("Don't have token or failed to work properly."));
 		} else {
-      this.setState({ isSignedIn: false});
+      this.setState({ 
+        id: '',
+        firstName: '',
+        lastName: '',
+        username: '',
+        email: '',
+        savedEntries: '',
+        joined: '',
+        isSignedIn: false,
+      });
     }
   }
 
@@ -121,6 +128,7 @@ class App extends Component {
                   email={this.state.email}
                   savedEntries={this.state.savedEntries}
                   articles={this.state.articles}
+                  userSignedIn={this.userSignIn}
                 />
               </Route>
             </Switch>

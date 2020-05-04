@@ -83,10 +83,6 @@ class Home extends Component {
     // window.localStorage.setItem('token', token) // session/local storage is a way to save information on the browser. It uses key, value ('token', token in this case)
     window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
 	}
-
-	// token = () => {
-	// 	window.sessionStorage.getItem('token');
-	// }
 	
 	onClickSaveArticle = (token, published, author, title, image, description, url) => {
 		API.saveArticle({
@@ -165,7 +161,7 @@ class Home extends Component {
 			justifyContent: "flex-start",
 		};
 
-		console.log(sessionStorage.getItem('token'));
+		console.log(this.state.news);
 
 		return (
 
