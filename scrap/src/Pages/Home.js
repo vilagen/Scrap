@@ -3,8 +3,9 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
 				 Form, FormGroup, Label, Input } from "reactstrap";
 import ProfileIcon from "../components/Profile/ProfileIcon";
 import { NewsList, NewsListItem } from "../components/NewsContainer/NewsContainer";
+import { NewsCardList, NewsCardItem} from "../components/NewsContainer/NewsCard"
 import API from "../APIs/API";
-import './style.css';
+import './pagesStyle.css';
 
 class Home extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class Home extends Component {
 			modal: false,
 			username: "",
 			password: "",
+			matches: window.matchMedia("(min-width: 740px)").matches,
 		};
 	};
 
@@ -55,7 +57,7 @@ class Home extends Component {
 		console.log(this.state.topic)
 	};
 
-	handleOptionChange2 = () => {
+	handleOptionChange = () => {
 		this.setState(prevState => ({
 			headlines: !prevState.headlines
 		}));
@@ -63,9 +65,13 @@ class Home extends Component {
 	};
 
 	async componentDidMount() {
+
 		// await API.newsSearch()
 		// .then( res => this.setState({news: res.data}))
 		// .catch(err => console.log(err));
+
+		const handler = e => this.setState({matches: e.matches})
+		window.matchMedia("(min-width: 740px)").addListener(handler)
 
 		await fetch("api/currentnews")
 		.then(res => res.json())
@@ -168,45 +174,16 @@ class Home extends Component {
 			<div>
 			
 				<div className="vertAlign3">
-					<span className="picPosition"><ProfileIcon userSignedIn={this.props.userSignedIn} toggleModal={this.toggleModal}/></span>
-					<p id="scrap"> SCRAP </p>
+					<span className="picPosition">
+						<ProfileIcon 
+							isSignedIn={this.props.isSignedIn} 
+							userSignedIn={this.props.userSignedIn} 
+							toggleModal={this.toggleModal}
+						/>
+					</span>
+					<p id="scrap"> BULLET BOARD </p>
 					<p className="scrap2">A Site For Your News</p>
 				</div>
-
-				<Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-				<ModalHeader toggle={this.toggleModal} close={this.closeBtn}>Modal title</ModalHeader>
-				<ModalBody>
-					<Form>
-						<h4>Signin</h4>
-						<br></br>
-						<FormGroup controlId="formBasicEmail">
-							<Label className="d-flex justify-content-start">Username</Label>
-							<Input
-							name="username"
-							type="text"
-							value={this.state.username} 
-							placeholder="Username"
-							onChange={this.handleInputChange}
-							/>
-						</FormGroup>
-
-						<FormGroup controlId="formBasicPassword">
-							<Label className="d-flex justify-content-start">Password</Label>
-							<Input 
-							name="password"
-							type="password" 
-							value={this.state.password}
-							placeholder="Password"
-							onChange={this.handleInputChange}
-							/>
-						</FormGroup>
-					</Form>
-				</ModalBody>
-				<ModalFooter>
-					<Button color="primary" onClick={this.onSubmitRegister}>Signin</Button>{' '}
-					<Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
-				</ModalFooter>
-			</Modal>
 
 				<form style={newsButtonStyle}>
 
@@ -231,7 +208,7 @@ class Home extends Component {
 								type="radio" 
 								name="headlines" 
 								value={true}
-								onChange={this.handleOptionChange2}
+								onChange={this.handleOptionChange}
 								/>
 								Headlines
 							</label>
@@ -243,7 +220,7 @@ class Home extends Component {
 								type="radio" 
 								name="headlines" 
 								value={false}
-								onChange={this.handleOptionChange2}
+								onChange={this.handleOptionChange}
 								/>
 								Everything
 							</label>
@@ -260,13 +237,16 @@ class Home extends Component {
 				</form>
 
 				{this.state.news.length === 0
+
 					?
 					<div>
 						<h1 id="scrap2" style={{textAlign:"center"}}>Sorry. There were no results.</h1>
 					</div>
 					: 
+
 					<NewsList>
-						{this.state.news.map( (stories, i) => (
+		
+						{this.state.matches && this.state.news.map( (stories, i) => (
 							<NewsListItem
 								key={i}
 								author={stories.author}
@@ -281,7 +261,30 @@ class Home extends Component {
 								/>
 							)
 						)};
-					</NewsList>						
+				
+
+					
+
+				
+						{!this.state.matches && this.state.news.map( (stories, i) => (
+							<NewsCardItem
+								key={i}
+								author={stories.author}
+								title={stories.title}
+								image={stories.urlToImage}
+								description={stories.description}
+								url={stories.url}
+								published={stories.source.name}
+								allowSave={this.props.isSignedIn}
+								onSave={() => this.onClickSaveArticle(sessionStorage.getItem('token'), stories.source.name, 
+								stories.author, stories.title, stories.urlToImage, stories.description, stories.url)}
+								/>
+							)
+						)};
+			
+
+					</NewsList>
+
 				};
 
 			</div>
@@ -290,3 +293,40 @@ class Home extends Component {
 }
 
 export default Home
+
+
+
+// <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+// <ModalHeader toggle={this.toggleModal} close={this.closeBtn}>Modal title</ModalHeader>
+// <ModalBody>
+// 	<Form>
+// 		<h4>Signin</h4>
+// 		<br></br>
+// 		<FormGroup controlId="formBasicEmail">
+// 			<Label className="d-flex justify-content-start">Username</Label>
+// 			<Input
+// 			name="username"
+// 			type="text"
+// 			value={this.state.username} 
+// 			placeholder="Username"
+// 			onChange={this.handleInputChange}
+// 			/>
+// 		</FormGroup>
+
+// 		<FormGroup controlId="formBasicPassword">
+// 			<Label className="d-flex justify-content-start">Password</Label>
+// 			<Input 
+// 			name="password"
+// 			type="password" 
+// 			value={this.state.password}
+// 			placeholder="Password"
+// 			onChange={this.handleInputChange}
+// 			/>
+// 		</FormGroup>
+// 	</Form>
+// </ModalBody>
+// <ModalFooter>
+// 	<Button color="primary" onClick={this.onSubmitRegister}>Signin</Button>{' '}
+// 	<Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
+// </ModalFooter>
+// </Modal>

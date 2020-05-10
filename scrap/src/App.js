@@ -4,6 +4,7 @@ import Home from './Pages/Home'
 import Register from './Pages/Register'
 import Login from './Pages/Login';
 import UserPage from './Pages/UserPage';
+import ProfileIcon from "./components/Profile/ProfileIcon";
 import './App.css';
 
 // const initialState = {
@@ -21,6 +22,7 @@ const initialState = {
     savedEntries: '',
     joined: '',
     redirect: null,
+    invisible: false,
     // modal: false,
   }
 };
@@ -101,16 +103,19 @@ class App extends Component {
   
 
   render () {
-    console.log(this.state.articles);
+  
     return (
       <div>
         <Router>
 
-          <div>
+          <div> 
 
             <Switch>
               <Route exact path = "/">
-                <Home isSignedIn={this.state.isSignedIn} userSignedIn={this.userSignIn} />
+                <Home 
+                  id={this.state.id}
+                  isSignedIn={this.state.isSignedIn} 
+                  userSignedIn={this.userSignIn} />
               </Route>
               <Route exact path ="/register">
                 <Register userRegister={this.userSignIn}/>
@@ -120,7 +125,6 @@ class App extends Component {
               </Route>
               <Route exact path ="/profile">
                 <UserPage 
-                  isSignedIn={this.state.isSignedIn}
                   id={this.state.id}
                   firstName={this.state.firstName}
                   lastName={this.state.lastName}
@@ -128,6 +132,7 @@ class App extends Component {
                   email={this.state.email}
                   savedEntries={this.state.savedEntries}
                   articles={this.state.articles}
+                  isSignedIn={this.state.isSignedIn}
                   userSignedIn={this.userSignIn}
                 />
               </Route>

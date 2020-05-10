@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Form, FormGroup, Label, Input, Card, CardBody } from "reactstrap";
 import { Link, Redirect } from "react-router-dom";
-import './style.css';
+import './pagesStyle.css';
 
 class SignUp extends Component {
 

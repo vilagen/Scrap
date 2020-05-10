@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Link, Redirect } from "react-router-dom";
+import API from "../../APIs/API";
 import "./style.css";
+
+const token = window.sessionStorage.getItem('token');
 
 class ProfileIcon extends Component {
 
@@ -13,6 +16,7 @@ class ProfileIcon extends Component {
       username: '',
       password: '',
       registerError: '',
+      signedIn: this.props.isSignedIn
       // redirect: null,
     };
   };
@@ -23,76 +27,12 @@ class ProfileIcon extends Component {
     }));
   };
 
-  // toggleModal = () => {
-  //   this.setState(prevState => ({
-  //     modal: !prevState.modal
-  //   }));
-  // };
-
-  closeBtn = <button className="close" onClick={this.toggleModal}>&times;</button>
-
-  handleInputChange = event => {
-		const { name, value } = event.target;
-		this.setState({
-				[name]: value
-		});
+  loadArticles = (token, id) => {
+    API.retrieveUserInfo(token, id)
+      // .then(res => this.setState({ signedIn: true }))
+      .then(res => console.log(res))
+      .catch(err => console.log(`There was an error retrieving articles. ${err}`));
   };
-  
-  saveAuthTokenInSession = (token) => {
-    // window.localStorage.setItem('token', token) // session/local storage is a way to save information on the browser. It uses key, value ('token', token in this case)
-    window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
-  }
-
-  onSubmitRegister = (event) => {
-		event.preventDefault();
-		if (this.state.username === "" || this.state.password === "") {
-			alert("Missing username or password.")
-		} else {
-			fetch('/api/signin', {
-				method: "post",
-				headers: {"Content-Type": "application/json"},
-				body: JSON.stringify({
-					username: this.state.username,
-					password: this.state.password,
-				})
-			})
-			.then( res => res.json())
-			.then( data => {
-				console.log(data)
-				if (data.success === 'true' && data.userId) {
-				this.saveAuthTokenInSession(data.token)
-					fetch(`/api/profile/${data.userId}`, {
-						method: 'get',
-						headers: {
-							'Content-Type': 'application/json',
-							'Authorization': data.token,					
-						}
-					})
-					.then(res => res.json())
-					.then( user => {
-						if(user && user.email) {
-              alert("Sign in was successful!")
-              this.props.userSignedIn(true);
-              fetch("api/currentnews")
-              .then(res => res.json())
-              .then( res => this.props.signinNews(res))
-              console.log(this.props.news);
-          }})
-				} else {
-					alert(data)
-				}
-			});
-		};
-  };
-
-  // onSubmitRegister = (event) => {
-	// 	event.preventDefault();
-	// 	if (this.state.username === "" || this.state.password === "") {
-	// 		alert("Missing username or password.")
-	// 	} else {
-	// 	  this.toggleModal()
-	// 	};
-  // };
   
   signOutUser = (event) => {
     event.preventDefault();
@@ -106,14 +46,49 @@ class ProfileIcon extends Component {
     });
     window.sessionStorage.removeItem('token');
     this.props.userSignedIn(false);
+    this.setState({ signedIn: false});
     this.toggleDropDown();
   };
+
+  // async componentDidMount() {
+  //   await token
+  //   if (token) {
+	// 		fetch('/api/signin', {
+	// 			method: 'post',
+	// 			headers: {
+	// 				'Content-Type': 'application/json',
+	// 				'Authorization': token // usually use 'Bearer ' + token
+	// 			}
+	// 		})
+	// 		.then(res => res.json())
+	// 		.then(data => {
+	// 			if (data && data.id) {
+  //         this.setState({ signedIn: true })
+	// 	    } else {
+  //         this.setState({ signedIn: false});
+  //       }
+  //     })
+  //   } else {
+  //     this.setState({ signedIn: false});
+  //   };
+  // };
+
+
+  // async componentDidMount() {
+  //   if(this.props.isSignedIn === true) {
+  //     this.setState({ signedIn: true })
+  //   } else {
+  //     this.setState({ signedIn: false});
+  //   }
+  // }
 
   render() {
 
     if (this.state.redirect) {
 			return <Redirect to={this.state.redirect} />
-		}
+    }
+    
+    console.log(this.state.signedIn)
 
     return (
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropDown}>
@@ -121,18 +96,27 @@ class ProfileIcon extends Component {
           <img src="./images/defUserImage.jpg" className="defaultImage" alt="userImage"/>
         </DropdownToggle>
         <DropdownMenu right>
-          <DropdownItem>
-          <Link to={"/login"}>
-            Login
-          </Link>
-          </DropdownItem>
+          {this.state.signedIn && <DropdownItem>
+            <Link to={"/"}>
+            Home
+            </Link>
+          </DropdownItem>}
+          {!this.state.signedIn && <DropdownItem>
+            <Link to={"/login"}>
+              Login
+            </Link>
+          </DropdownItem>}
+          {this.state.signedIn && <DropdownItem>
+            <Link to={"/profile"}>
+            Profile
+            </Link>
+          </DropdownItem>}
+          <DropdownItem divider />
           <DropdownItem>
             <Link to={"/register"}>
             Register
             </Link>
           </DropdownItem>
-          <DropdownItem>Profile</DropdownItem>
-          <DropdownItem divider />
           <DropdownItem onClick={this.signOutUser} toggle={false}>
             <Link to={"/"}>
             Signout

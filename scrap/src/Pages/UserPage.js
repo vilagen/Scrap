@@ -3,23 +3,8 @@ import {Container, Row, Col} from "reactstrap";
 import { Link, Redirect } from "react-router-dom";
 import { NewsList, NewsListItem } from "../components/NewsContainer/NewsContainer";
 import ProfileIcon from "../components/Profile/ProfileIcon";
-import "./style.css";
+import "./pagesStyle.css";
 import API from "../APIs/API";
-
-// const initialState = {
-//   isSignedIn: false,
-//   user: {
-//     id: '',
-//     firstName: '',
-//     lastName: '',
-//     username: '',
-//     email: '',
-//     savedEntries: '',
-//     joined: '',
-//     articles: [],
-//     redirect: null,
-//   }
-// };
 
 const profileSize= {
   height: "125px",
@@ -42,7 +27,7 @@ class UserPage extends Component {
   };
 
   loadArticles = (token, id) => {
-    API.retrieveArticles(token, id)
+    API.retrieveUserInfo(token, id)
       .then(res => this.setState({ userArticles: res.data.Articles }))
       .then(res => console.log(this.state.userArticles))
       .catch(err => console.log(`There was an error retrieving articles. ${err}`));
@@ -86,14 +71,17 @@ class UserPage extends Component {
               this.loadArticles(token, this.state.id)
 						};
 					});
-				};
+				} else {
+          this.setState({ isSignedIn: false});
+          this.setState({ redirect: "/"});
+        };
 			})
 			.catch(console.log("Don't have token or failed to work properly."));
 		} else {
       this.setState({ isSignedIn: false});
       this.setState({ redirect: "/"});
     }
-  }
+  };
 
   render() {
 
@@ -125,7 +113,8 @@ class UserPage extends Component {
             <Col  md="4" sm="4" xs="4"
             className="displayCenter">
                 <ProfileIcon
-                userSignedIn={this.props.userSignedIn}
+                isSignedIn={this.props.isSignedIn} 
+                userSignedIn={this.props.userSignedIn} 
                 style={profileSize}/>
             </Col>
           

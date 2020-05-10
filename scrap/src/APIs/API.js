@@ -19,7 +19,7 @@ export default {
 		};
 	},
 
-	retrieveArticles: (token, id) => {
+	retrieveUserInfo: (token, id) => {
 		const headers = {
 			'Content-Type': 'application/json',
 			'Authorization': token
