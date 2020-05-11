@@ -4,7 +4,6 @@ import Home from './Pages/Home'
 import Register from './Pages/Register'
 import Login from './Pages/Login';
 import UserPage from './Pages/UserPage';
-import ProfileIcon from "./components/Profile/ProfileIcon";
 import './App.css';
 
 // const initialState = {

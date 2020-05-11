@@ -70,8 +70,13 @@ class Home extends Component {
 		// .then( res => this.setState({news: res.data}))
 		// .catch(err => console.log(err));
 
-		const handler = e => this.setState({matches: e.matches})
-		window.matchMedia("(min-width: 740px)").addListener(handler)
+		// const handler = e => this.setState({matches: e.matches})
+		// window.matchMedia("(min-width: 768px)").addListener(handler);
+		// this was one solution, but addListener is depracated
+
+		window.matchMedia("(min-width: 740px)").addEventListener( "change", (e) => {
+			this.setState({matches: e.matches})
+		});
 
 		await fetch("api/currentnews")
 		.then(res => res.json())
@@ -152,6 +157,8 @@ class Home extends Component {
 
 	render() {
 
+		console.log(this.state.matches)
+
 		const newsButtonStyle = {
 			height: "10vh",
 			display: "flex",
@@ -185,9 +192,11 @@ class Home extends Component {
 					<p className="scrap2">A Site For Your News</p>
 				</div>
 
-				<form style={newsButtonStyle}>
+				<form className="newsSearch">
 
-					<label htmlFor="topic">Topic: </label>
+					<label
+					id="topic"
+					htmlFor="topic">Topic: </label>
 					<input
 					className="mx-2" 
 					name="topic"
@@ -200,7 +209,7 @@ class Home extends Component {
 					placeholder="Politics, Sports, Technology, etc"
 					/>
 
-					<div className="mx-2">
+					<div className="my-2 mx-5">
 
 						<div className="radio" style={radioButtonStyle}>
 							<label className="headlineRadio" htmlFor="headlineRadio">
@@ -210,6 +219,7 @@ class Home extends Component {
 								value={true}
 								onChange={this.handleOptionChange}
 								/>
+								<i className="mx-1 fas fa-newspaper"></i>
 								Headlines
 							</label>
 						</div>
@@ -222,13 +232,15 @@ class Home extends Component {
 								value={false}
 								onChange={this.handleOptionChange}
 								/>
-								Everything
+								<i class="mx-1 far fa-newspaper"></i>
+								All Articles
 							</label>
 						</div>
 
 					</div>
 
-					<button style={{color:"dodgerblue"}}				
+					<button
+					className="buttonStyle"
 					onClick={this.userNewsSearchSubmit}
 					>
 					Search
@@ -262,10 +274,6 @@ class Home extends Component {
 							)
 						)};
 				
-
-					
-
-				
 						{!this.state.matches && this.state.news.map( (stories, i) => (
 							<NewsCardItem
 								key={i}
@@ -282,7 +290,6 @@ class Home extends Component {
 							)
 						)};
 			
-
 					</NewsList>
 
 				};

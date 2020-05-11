@@ -12,13 +12,22 @@ const textStyling = {
 	fontFamily:' "ZCOOL XiaoWei", "serif"',
   fontSize: "20px",
   color: "black",
+  padding: '0px'
+};
+
+const titleStyling = {
+	fontFamily:' "ZCOOL XiaoWei", "serif"',
+  fontSize: "20px",
+  color: "white",
+  backgroundColor: "black",
+  padding: '5px'
 };
 
 const cardStyle = {
   width: "325px",
   borderStyle:"solid",
   borderWidth: "thick",
-	borderColor: "#cccc00",
+  borderColor: "#cccc00",
 };
 
 const centerCard = {
@@ -30,7 +39,8 @@ const centerCard = {
 };
 
 const cardImage = {
-  width: '90%',
+  padding: '0px',
+  width: '95%',
   marginRight: 'auto',
   marginLeft: 'auto'
 }
@@ -56,9 +66,9 @@ export function NewsCardItem({
 
         <CardBody style={textStyling}>
         
-          <CardTitle> {title} </CardTitle>
+          <CardTitle style={titleStyling}> {title} </CardTitle>
           
-          <CardSubtitle> Author(s): {author} </CardSubtitle>
+          <CardSubtitle style={{marginBottom:"5px"}}> Author(s): {author} </CardSubtitle>
           
         </CardBody>
         
@@ -70,18 +80,33 @@ export function NewsCardItem({
 
           <CardText>{description}</CardText>
           
-          {allowSave && <CardLink 
-            onClick={onSave}
-            // color="success" 
-          >
-            Save
-          </CardLink>}
+          <span>
 
-          <CardLink 
-            href={url}
+          <a className="btn btn-primary mx-2 my-2"
+          style={{height: "40px"}}
+          href={url}>Story</a>
+
+          {allowSave && <Button
+            className="mx-1 my-2" 
+            onClick={onSave}
+            style={{height: "40px"}} 
+            color="success" 
+            >
+            Save
+            </Button>	
+          }
+
+          {allowDelete && <Button
+            className="mx-1 my-2" 
+            onClick={onDelete}
+            style={{height: "40px"}} 
+            color="danger"
           >
-            Story
-          </CardLink>
+            Delete
+          </Button>
+          }
+
+          </span>
           
         </CardBody>
         
