@@ -10,6 +10,8 @@ class SignUp extends Component {
 		this.state = {
 			username: "",
 			email: "",
+			firstName:"",
+			lastName:"",
 			password: "",
 			password2: "",
 			registerError: "",
@@ -90,7 +92,7 @@ class SignUp extends Component {
 
 			<div>
 
-				<div className="centerPage">
+				<div className="centerPage mt-5">
 
 					<Card style={{ width: '20rem' }}>
 
@@ -99,10 +101,11 @@ class SignUp extends Component {
 							<Form>
 
 								<h4>Register</h4>
-								<br></br>
+
+								<p>* is required</p>
 
 								<FormGroup controlId="formBasicEmail">
-									<Label className="d-flex justify-content-start">Username</Label>
+									<Label className="d-flex justify-content-start">Username*</Label>
 									<Input
 									name="username"
 									type="text" 
@@ -113,7 +116,7 @@ class SignUp extends Component {
 								</FormGroup>
 
 								<FormGroup controlId="formBasicEmail">
-									<Label className="d-flex justify-content-start">Email address</Label>
+									<Label className="d-flex justify-content-start">Email address*</Label>
 									<Input 
 									name="email"
 									type="email" 
@@ -123,8 +126,30 @@ class SignUp extends Component {
 									/>
 								</FormGroup>
 
+								<FormGroup controlId="formBasicEmail">
+									<Label className="d-flex justify-content-start">First Name</Label>
+									<Input 
+									name="firstName"
+									type="firstName" 
+									placeholder="Morgan"
+									value={this.state.email}
+									onChange={this.handleInputChange}
+									/>
+								</FormGroup>
+
+								<FormGroup controlId="formBasicEmail">
+									<Label className="d-flex justify-content-start">Last Name</Label>
+									<Input 
+									name="lastName"
+									type="lastName" 
+									placeholder="Doe"
+									value={this.state.email}
+									onChange={this.handleInputChange}
+									/>
+								</FormGroup>
+
 								<FormGroup controlId="formBasicPassword">
-									<Label className="d-flex justify-content-start">Password</Label>
+									<Label className="d-flex justify-content-start">Password*</Label>
 									<Input 
 									name="password"
 									type="password" 
@@ -135,7 +160,7 @@ class SignUp extends Component {
 								</FormGroup>
 
 								<FormGroup controlId="formBasicPassword">
-									<Label className="d-flex justify-content-start">Password</Label>
+									<Label className="d-flex justify-content-start">Password*</Label>
 									<Input 
 									name="password2"
 									type="password" 
