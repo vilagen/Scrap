@@ -1,7 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Button,
-				 Card, CardImg, CardText, CardBody, CardLink,
-				 CardTitle, CardSubtitle } from 'reactstrap';
+import { Container, Row, Col, Button, } from 'reactstrap';
 import './newsContainerstyle.css';
 
 export function NewsList({children}) {

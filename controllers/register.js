@@ -6,7 +6,7 @@ const redisClient = redis.createClient(process.env.REDIS_URI);
 
 const handleRegister = (req, res, err) => {
 
-  const { username, email, password, password2 } = req.body;
+  const { username, email, firstName, lastName, password, password2 } = req.body;
 
   if( !username || !email || !password || !password2) {
     return res.status(400).json("Missing required form items.");
@@ -30,9 +30,13 @@ const handleRegister = (req, res, err) => {
     });
 
   const user = new db.User({
+
+    // first_name: firstName,
+    // last_name: lastName,
     username: username,
     email: email,
     joined: new Date(),
+
   });
 
   user.save()

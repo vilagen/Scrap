@@ -1,13 +1,14 @@
 import React, { Component } from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, 
-				 Form, FormGroup, Label, Input } from "reactstrap";
+// import { Button, Modal, ModalHeader, ModalBody, ModalFooter, 
+// 				 Form, FormGroup, Label, Input } from "reactstrap";
 import ProfileIcon from "../components/Profile/ProfileIcon";
 import { NewsList, NewsListItem } from "../components/NewsContainer/NewsContainer";
-import { NewsCardList, NewsCardItem} from "../components/NewsContainer/NewsCard"
+import { NewsCardItem} from "../components/NewsContainer/NewsCard"
 import API from "../APIs/API";
 import './pagesStyle.css';
 
 class Home extends Component {
+	
   constructor(props) {
     super(props);
 	  this.state = {

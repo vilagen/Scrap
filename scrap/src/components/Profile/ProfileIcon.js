@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, 
+         Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link, Redirect } from "react-router-dom";
 import API from "../../APIs/API";
 import "./style.css";
-
-const token = window.sessionStorage.getItem('token');
 
 class ProfileIcon extends Component {
 
@@ -12,11 +11,11 @@ class ProfileIcon extends Component {
     super(props);
     this.state ={
       dropdownOpen: false,
-      // modal: false,
+      modal: false,
       username: '',
       password: '',
       registerError: '',
-      signedIn: this.props.isSignedIn
+      signedIn: this.props.isSignedIn,
       // redirect: null,
     };
   };
@@ -24,6 +23,12 @@ class ProfileIcon extends Component {
   toggleDropDown = () => {
     this.setState(prevState => ({
       dropdownOpen: !prevState.dropdownOpen
+    }));
+  };
+
+  toggleModal = () => {
+    this.setState(prevState => ({
+      modal: !prevState.modal
     }));
   };
 
@@ -50,37 +55,13 @@ class ProfileIcon extends Component {
     this.toggleDropDown();
   };
 
-  // async componentDidMount() {
-  //   await token
-  //   if (token) {
-	// 		fetch('/api/signin', {
-	// 			method: 'post',
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 				'Authorization': token // usually use 'Bearer ' + token
-	// 			}
-	// 		})
-	// 		.then(res => res.json())
-	// 		.then(data => {
-	// 			if (data && data.id) {
-  //         this.setState({ signedIn: true })
-	// 	    } else {
-  //         this.setState({ signedIn: false});
-  //       }
-  //     })
-  //   } else {
-  //     this.setState({ signedIn: false});
-  //   };
-  // };
-
-
-  // async componentDidMount() {
-  //   if(this.props.isSignedIn === true) {
-  //     this.setState({ signedIn: true })
-  //   } else {
-  //     this.setState({ signedIn: false});
-  //   }
-  // }
+  async componentDidMount() {
+    await this.props.isSignedIn
+    this.setState( {signedIn: this.props.isSignedIn})
+    // setTimeout( () => {
+    //   this.setState( {signed: this.props.isSignedIn} )
+    // }, 1000)
+  };
 
   render() {
 
@@ -96,32 +77,60 @@ class ProfileIcon extends Component {
           <img src="./images/defUserImage.jpg" className="defaultImage" alt="userImage"/>
         </DropdownToggle>
         <DropdownMenu right>
-          {this.state.signedIn && <DropdownItem>
+          {this.props.isSignedIn && <DropdownItem>
             <Link to={"/"}>
             Home
             </Link>
           </DropdownItem>}
-          {!this.state.signedIn && <DropdownItem>
+          {!this.props.isSignedIn && <DropdownItem>
             <Link to={"/login"}>
               Login
             </Link>
           </DropdownItem>}
-          {this.state.signedIn && <DropdownItem>
+          {this.props.isSignedIn && <DropdownItem>
             <Link to={"/profile"}>
             Profile
             </Link>
           </DropdownItem>}
           <DropdownItem divider />
-          <DropdownItem>
+
+          {!this.props.isSignedIn && <DropdownItem 
+            onClick={this.signOutUser} 
+            toggle={false}
+          >
             <Link to={"/register"}>
-            Register
+              Register
             </Link>
-          </DropdownItem>
-          <DropdownItem onClick={this.signOutUser} toggle={false}>
+          </DropdownItem>}
+
+          {this.props.isSignedIn && <DropdownItem>
+            <span onClick={this.toggleModal} style={{color: "red"}}>Register</span>
+            <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+              <ModalHeader toggle={this.state.toggleModal}>Registration</ModalHeader>
+              <ModalBody>
+                Going to the registration page will log you out. Do you want to proceed?
+              </ModalBody>
+              <ModalFooter>
+                <Link to={"/register"}>
+                  <Button 
+                  color="primary"
+                  >
+                  Continue
+                  </Button>
+                </Link>
+                <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
+              </ModalFooter>
+            </Modal>
+          </DropdownItem>}
+
+          {this.props.isSignedIn && <DropdownItem 
+            onClick={this.signOutUser} 
+            toggle={false}
+          >
             <Link to={"/"}>
             Signout
             </Link>
-          </DropdownItem>
+          </DropdownItem>}
         </DropdownMenu>
       </Dropdown>
     );

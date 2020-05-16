@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {Container, Row, Col} from "reactstrap";
 import { Link, Redirect } from "react-router-dom";
 import { NewsList, NewsListItem } from "../components/NewsContainer/NewsContainer";
+import { NewsCardItem} from "../components/NewsContainer/NewsCard"
 import ProfileIcon from "../components/Profile/ProfileIcon";
 import "./pagesStyle.css";
 import API from "../APIs/API";
@@ -23,6 +24,7 @@ class UserPage extends Component {
       userArticles: [],
       redirect: null,
       isSignedIn: false,
+      mobile: window.matchMedia("(min-width: 740px)").matches,
     }
   };
 
@@ -38,50 +40,60 @@ class UserPage extends Component {
       .then(res=> this.loadArticles(token, this.state.id))
   };
 
-  async componentDidMount() {
+ async componentDidMount() {
+  let token = window.sessionStorage.getItem('token');
+
+  window.matchMedia("(min-width: 740px)").addEventListener( "change", (e) => {
+    this.setState({mobile: e.matches})
+  });
+
+  // setTimeout( ()=> {
     await token
     if (token) {
-			fetch('/api/signin', {
-				method: 'post',
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': token // usually use 'Bearer ' + token
-				}
-			})
-			.then(res => res.json())
-			.then(data => {
-				if (data && data.id) {
-					fetch(`/api/profile/${data.id}`, {
-						method: 'get',
-						headers: {
-							'Content-Type': 'application/json',
-							'Authorization': token
-						}
-					})
-					.then(res => res.json())
-					.then(user => {
-						if (user && user.username) {
-							console.log(user);
-							this.setState({
+      fetch('/api/signin', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token // usually use 'Bearer ' + token
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.id) {
+          fetch(`/api/profile/${data.id}`, {
+            method: 'get',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token
+            }
+          })
+          .then(res => res.json())
+          .then(user => {
+            if (user && user.username) {
+              console.log(user);
+              this.setState({
                 id: user.id,
                 savedEntries: user.saved_entries,
                 userArticles: user.Articles,
               });
               console.log(this.state.userArticles)
               this.loadArticles(token, this.state.id)
-						};
-					});
-				} else {
+            };
+          });
+        } else {
           this.setState({ isSignedIn: false});
           this.setState({ redirect: "/"});
         };
-			})
-			.catch(console.log("Don't have token or failed to work properly."));
-		} else {
-      this.setState({ isSignedIn: false});
-      this.setState({ redirect: "/"});
-    }
-  };
+      })
+      .catch(console.log("Don't have token or failed to work properly."));
+      } else {
+        console.log(`From userPage ${token}`)
+        this.setState({ isSignedIn: false});
+        this.setState({ redirect: "/"});
+      }
+    };
+    // ,1000);
+  // };
 
   render() {
 
@@ -142,7 +154,7 @@ class UserPage extends Component {
           </div>
           : 
           <NewsList>
-            {this.state.userArticles.map( (stories, i) => (
+            {this.state.mobile && this.state.userArticles.map( (stories, i) => (
               <NewsListItem
                 key={i}
                 author={stories.author}
@@ -156,13 +168,30 @@ class UserPage extends Component {
                 />
               )
             )};
-          </NewsList>						
+
+            {!this.state.mobile && this.state.userArticles.map( (stories, i) => (
+							<NewsCardItem
+              key={i}
+              author={stories.author}
+              title={stories.title}
+              image={stories.image}
+              description={stories.description}
+              url={stories.url}
+              published={stories.published}
+              allowDelete={this.props.isSignedIn}
+              onDelete={() => this.onClickDelete(token, stories.id)}
+								/>
+							)
+						)};
+
+          </NewsList>	
+
         };
       
       </div>
-    )
-  }
-}
+    );
+  };
+};
 
 export default UserPage;
 

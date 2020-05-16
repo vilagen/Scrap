@@ -5,12 +5,18 @@ module.exports = function(sequelize, DataTypes) {
 
     first_name: {
 			type: DataTypes.STRING,
-			defaultValue: "Morgan"
+			defaultValue: "Morgan",
+			validate: {
+				min:2,
+			}
     },
 
     last_name: {
 			type: DataTypes.STRING,
-			defaultValue: "Doe"
+			defaultValue: "Doe",
+			validate: {
+				min:2,
+			}
     },
 			
 		username: {

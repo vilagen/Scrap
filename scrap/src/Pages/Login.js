@@ -26,7 +26,24 @@ class Login extends Component {
 	saveAuthTokenInSession = (token) => {
     // window.localStorage.setItem('token', token) // session/local storage is a way to save information on the browser. It uses key, value ('token', token in this case)
     window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
-  }
+	}
+	
+	async componentDidMount() {
+		const token = window.sessionStorage.getItem(`token`);
+		await token
+		if (token) {
+			fetch('http://localhost:3001/api/signout', {
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': token,
+				},
+			});
+			window.sessionStorage.removeItem('token');
+			this.props.userSignin(false);
+		};
+	};
+
 
   onSubmitLogin= (event) => {
 		event.preventDefault();
