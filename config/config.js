@@ -38,6 +38,7 @@ module.exports = {
 // const db_password = process.env.DB_PASS
 
 // module.exports = {
+
 //   "development": {
 //     "username": "postgres",
 //     "password": db_password,
@@ -55,12 +56,11 @@ module.exports = {
 //   },
 
 //   "test": {
-//     "username": process.env.POSTGRES_USER,
-//     "password": process.env.POSTGRES_PASSWORD,
-//     "database": process.env.POSTGRES_DB,
-//     "host": process.env.POSTGRES_HOST,
+//     "username": "postgres",
+//     "password": db_password,
+//     "database": "scrap",
+//     "host": "localhost",
 //     "dialect": "postgres",
-//     "operatorsAliases": false
 //   },
 
 //   "production": {
@@ -68,4 +68,4 @@ module.exports = {
 //     "dialect": "postgres",
 //     "operatorsAliases": false
 //   }
-// };
+// }

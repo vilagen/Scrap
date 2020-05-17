@@ -6,7 +6,7 @@ const redisClient = redis.createClient(process.env.REDIS_URI);
 
 const handleRegister = (req, res, err) => {
 
-  const { username, email, password, password2 } = req.body;
+  const { username, email, firstName, lastName, password, password2 } = req.body;
 
   if( !username || !email || !password || !password2) {
     return res.status(400).json("Missing required form items.");
@@ -18,7 +18,7 @@ const handleRegister = (req, res, err) => {
     if(existingUser) {res.status(400).json({ error: `Username is already taken.` })}
     })
     .catch( error => {
-      if(error) {return `Error setting up new user. \n ${error}`}
+      if(error) {return `Error setting up new user. ${error}`}
     });
 
   db.User.findOne( {where: {username: username}} ).then( (err, existingUser) => {
@@ -26,13 +26,17 @@ const handleRegister = (req, res, err) => {
     else if(existingUser) {res.status(400).json({ error: `Username is already taken.` })}
     })
     .catch( error => {
-      if(error) {return `Error setting up new user. \n ${error}`}
+      if(error) {return `Error setting up new user. ${error}`}
     });
 
   const user = new db.User({
+
+    // first_name: firstName,
+    // last_name: lastName,
     username: username,
     email: email,
     joined: new Date(),
+
   });
 
   user.save()

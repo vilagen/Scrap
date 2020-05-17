@@ -1,7 +1,11 @@
 module.exports = function(sequelize, DataTypes) {
 	let Article = sequelize.define("Article", {
 
-    source: {
+    // source: {
+    //   type: DataTypes.STRING,
+    // },
+
+    published: {
       type: DataTypes.STRING,
     },
 
@@ -22,10 +26,6 @@ module.exports = function(sequelize, DataTypes) {
     },
 
     url: {
-      type: DataTypes.STRING,
-    },
-    
-    published: {
       type: DataTypes.STRING,
     },
 

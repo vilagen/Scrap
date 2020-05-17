@@ -1,0 +1,12 @@
+.imageContainer {
+  width: 100%;
+  height: auto;
+};
+
+.showCard {
+  visibility: hidden;
+};
+
+.showContainer {
+  visibility: hidden;
+};
