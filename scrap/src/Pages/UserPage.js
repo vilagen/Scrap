@@ -13,14 +13,18 @@ const profileSize= {
   borderRadius: "50px",
 };
 
-const token = window.sessionStorage.getItem('token');
+const pagetoken = window.sessionStorage.getItem('token');
 
 class UserPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       id: '',
+      firstName: '',
+      lastName: '',
       savedEntries: '',
+      username: '',
+      email: '',
       userArticles: [],
       redirect: null,
       isSignedIn: false,
@@ -73,6 +77,10 @@ class UserPage extends Component {
               console.log(user);
               this.setState({
                 id: user.id,
+                firstName: user.first_name,
+                lastName: user.last_name,
+                username: user.username,
+                email: user.email,
                 savedEntries: user.saved_entries,
                 userArticles: user.Articles,
               });
@@ -113,12 +121,12 @@ class UserPage extends Component {
 
             <Col md="8" sm="8" xs="8" className="spaceBetweenDiv">
               <div style={{justifyContent:"space-between"}}>
-                <p>Name: { `${this.props.firstName} ${this.props.lastName}` }</p>
-                <p>Username: {this.props.username}</p>
+                <p>Name: { `${this.state.firstName} ${this.state.lastName}` }</p>
+                <p>Username: {this.state.username}</p>
               </div>
               <div style={{justifyContent:"space-between"}}>
-                <p>Email: {this.props.email}</p>
-                <p>Entries: {this.props.savedEntries}</p>
+                <p>Email: {this.state.email}</p>
+                <p>Entries: {this.state.savedEntries}</p>
               </div>
             </Col>
 
@@ -164,7 +172,7 @@ class UserPage extends Component {
                 url={stories.url}
                 published={stories.published}
                 allowDelete={this.props.isSignedIn}
-                onDelete={() => this.onClickDelete(token, stories.id)}
+                onDelete={() => this.onClickDelete(pagetoken, stories.id)}
                 />
               )
             )};
@@ -179,7 +187,7 @@ class UserPage extends Component {
               url={stories.url}
               published={stories.published}
               allowDelete={this.props.isSignedIn}
-              onDelete={() => this.onClickDelete(token, stories.id)}
+              onDelete={() => this.onClickDelete(pagetoken, stories.id)}
 								/>
 							)
 						)};

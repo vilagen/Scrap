@@ -31,9 +31,26 @@ class SignUp extends Component {
     window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
 	}
 	
-	async componentDidMount() {
+	// async componentDidMount() {
+	// 	const token = window.sessionStorage.getItem(`token`);
+	// 	await token
+	// 	if (token) {
+	// 		fetch('http://localhost:3001/api/signout', {
+	// 			method: 'post',
+	// 			headers: {
+	// 				'Content-Type': 'application/json',
+	// 				'Authorization': token,
+	// 			},
+	// 		});
+	// 		window.sessionStorage.removeItem('token');
+	// 		this.props.userRegister(false);
+	// 	};
+	// };
+
+	onSubmitRegister = (event) => {
+		event.preventDefault();
 		const token = window.sessionStorage.getItem(`token`);
-		await token
+	
 		if (token) {
 			fetch('http://localhost:3001/api/signout', {
 				method: 'post',
@@ -45,10 +62,7 @@ class SignUp extends Component {
 			window.sessionStorage.removeItem('token');
 			this.props.userRegister(false);
 		};
-	};
 
-	onSubmitRegister = (event) => {
-		event.preventDefault();
 		if (this.state.username === "" || this.state.email === "" || this.state.password === "" || this.state.password2 === "") {
 			alert("All fields must be filled out.")
 		} else if (this.state.password !== this.state.password2) {
@@ -81,6 +95,7 @@ class SignUp extends Component {
 					.then(res => res.json())
 					.then( user => {
 						if(user && user.email) {
+							console.log(user)
 							alert("Registeration was successful!")
 							this.props.userRegister("true");
 							this.setState({ redirect: "/"});

@@ -10,8 +10,11 @@ import './App.css';
 //   isSignedIn: false,
 // };
 
+const token = window.sessionStorage.getItem('token');
+
 const initialState = {
   isSignedIn: false,
+  token: token,
   user: {
     id: '',
     firstName: '',
@@ -22,7 +25,6 @@ const initialState = {
     joined: '',
     redirect: null,
     invisible: false,
-    // modal: false,
   }
 };
 
@@ -33,60 +35,67 @@ class App extends Component {
     this.state = initialState
   };
 
- async componentDidMount() {
+  fetchData = (token) => {
+    // setTimeout( () => {
+    if (token) {
+      fetch('/api/signin', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token // usually use 'Bearer ' + token
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.id) {
+          fetch(`/api/profile/${data.id}`, {
+            method: 'get',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token
+            }
+          })
+          .then(res => res.json())
+          .then(user => {
+            if (user && user.username) {
+              console.log(user);
+              this.setState({
+                isSignedIn: true,
+                id: user.id,
+                firstName: user.first_name,
+                lastName: user.last_name,
+                username: user.username,
+                email: user.email,
+                savedEntries: user.saved_entries,
+              });
+            };
+          });
+        };
+      })
+      .catch(console.log(`Don't have token or failed to work properly. ${token}`));
+    } else {
+      // console.log("Component Did mount failed.")
+      this.setState({ 
+        id: '',
+        firstName: '',
+        lastName: '',
+        username: '',
+        email: '',
+        savedEntries: '',
+        joined: '',
+        isSignedIn: false,
+      });
+    }
+  };
+
+  async componentDidMount() {
     const token = window.sessionStorage.getItem('token');
     // setTimeout( () => {
-      await token
-      if (token) {
-        fetch('/api/signin', {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token // usually use 'Bearer ' + token
-          }
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data && data.id) {
-            fetch(`/api/profile/${data.id}`, {
-              method: 'get',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-              }
-            })
-            .then(res => res.json())
-            .then(user => {
-              if (user && user.username) {
-                console.log(user);
-                this.setState({
-                  isSignedIn: true,
-                  id: user.id,
-                  firstName: user.first_name,
-                  lastName: user.last_name,
-                  username: user.username,
-                  email: user.email,
-                  savedEntries: user.saved_entries,
-                });
-              };
-            });
-          };
-        })
-        .catch(console.log(`Don't have token or failed to work properly. ${token}`));
-      } else {
-        this.setState({ 
-          id: '',
-          firstName: '',
-          lastName: '',
-          username: '',
-          email: '',
-          savedEntries: '',
-          joined: '',
-          isSignedIn: false,
-        });
-      }
-    // }, 1000);
-  }
+    await token
+    if (token) {
+      this.fetchData(token)
+    }
+  };
 
   userSignIn = (verify) => {
     if (verify === "true") {

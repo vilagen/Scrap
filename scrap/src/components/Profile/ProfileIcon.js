@@ -104,33 +104,26 @@ class ProfileIcon extends Component {
           </DropdownItem>}
 
           {this.props.isSignedIn && <DropdownItem>
-            <span onClick={this.toggleModal} style={{color: "red"}}>Register</span>
+            <span onClick={this.toggleModal} className="text-primary">Signout</span>
             <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-              <ModalHeader toggle={this.state.toggleModal}>Registration</ModalHeader>
+              <ModalHeader toggle={this.state.toggleModal}>Signout</ModalHeader>
               <ModalBody>
-                Going to the registration page will log you out. Do you want to proceed?
+                Do you wish to sign out?
               </ModalBody>
               <ModalFooter>
-                <Link to={"/register"}>
-                  <Button 
+                <Button 
+                  onClick={this.signOutUser}
                   color="primary"
-                  >
+                >
+                <Link to={"/"} className="text-white">
                   Continue
-                  </Button>
-                </Link>
+                 </Link>
+                </Button>
                 <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
               </ModalFooter>
             </Modal>
           </DropdownItem>}
 
-          {this.props.isSignedIn && <DropdownItem 
-            onClick={this.signOutUser} 
-            toggle={false}
-          >
-            <Link to={"/"}>
-            Signout
-            </Link>
-          </DropdownItem>}
         </DropdownMenu>
       </Dropdown>
     );
@@ -138,6 +131,39 @@ class ProfileIcon extends Component {
 };
 
 export default ProfileIcon;
+
+// {this.props.isSignedIn && <DropdownItem>
+//   <span onClick={this.toggleModal} style={{color: "red"}}>Register</span>
+//   <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+//     <ModalHeader toggle={this.state.toggleModal}>Registration</ModalHeader>
+//     <ModalBody>
+//       Going to the registration page will log you out. Do you want to proceed?
+//     </ModalBody>
+//     <ModalFooter>
+//       <Link to={"/register"}>
+//         <Button 
+//         color="primary"
+//         >
+//         Continue
+//         <Link to={"/"}/>
+//         </Button>
+//       </Link>
+//       <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
+//     </ModalFooter>
+//   </Modal>
+// </DropdownItem>}
+
+// {this.props.isSignedIn && <DropdownItem 
+//     onClick={this.signOutUser} 
+//     toggle={false}
+//   >
+//     <Link to={"/"}>
+//     Signout
+//     </Link>
+//   </DropdownItem>}
+
+
+
 
 //example of how to use Hooks, but not practical here.
 // import React, { useState } from 'react';
