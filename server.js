@@ -8,11 +8,10 @@ const db = require("./models")
 const cors = require("cors");
 const app = express();
 
-
 // App Setup
 app.use(morgan('combined')); 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(routes);
 
 // app.use(express.json())
@@ -25,13 +24,20 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
-// Send every request to the React app
-// Define any API routes before this runs
-// app.get("*", function(req, res) {
-//   res.sendFile(path.join(__dirname, "./scrap/build/index.html"));
-// });
-
 const syncOptions = { force: false };
+
+// connection to heroku postgres
+
+const { Client } = require('pg');
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+client.connect();
 
 db.sequelize.sync(syncOptions).then(function() {
   app.listen(PORT, function() {

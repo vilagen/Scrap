@@ -2,7 +2,6 @@ const db = require("../models")
 const jwt = require('jsonwebtoken');
 const redis = require("redis");  
 const bcrypt = require("bcryptjs");
-
 const redisClient = redis.createClient(process.env.REDIS_URI);
 
 // need to finish login controller!!!

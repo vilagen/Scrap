@@ -47,7 +47,7 @@ module.exports = {
 }
 
 const userNewsTopicHeadlines = (topic, cb) => {
-  axios.get(`http://newsapi.org/v2/top-headlines?q=${topic}&country=us&apiKey=${news_api_key}`)
+  axios.get(`https://newsapi.org/v2/top-headlines?q=${topic}&country=us&apiKey=${news_api_key}`)
   .then(data => {
     cb(data.data.articles)
   })
@@ -55,7 +55,7 @@ const userNewsTopicHeadlines = (topic, cb) => {
 };
 
 const userNewsTopicEverything = (topic, cb) => {
-  axios.get(`http://newsapi.org/v2/everything?q=${topic}&apiKey=${news_api_key}`)
+  axios.get(`https://newsapi.org/v2/everything?q=${topic}&apiKey=${news_api_key}`)
   .then(data => {
     cb(data.data.articles)
   })
