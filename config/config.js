@@ -1,20 +1,20 @@
 require('dotenv').config()
 
 module.exports = {
-  "development": {
-    "username": "david",
-    "password": "secret",
-    "database": "scrap-docker",
-    "host": "postgres",
-    "dialect": "postgres",
-
   // "development": {
-  //   "username": process.env.POSTGRES_USER,
-  //   "password": process.env.POSTGRES_PASSWORD,
-  //   "database": process.env.POSTGRES_DB,
-  //   "host": 'localhost',
-  //   "dialect": 'postgres',
-  //   "logging": true,
+  //   "username": "david",
+  //   "password": "secret",
+  //   "database": "scrap-docker",
+  //   "host": "postgres",
+  //   "dialect": "postgres",
+
+  "development": {
+    "username": process.env.POSTGRES_USER,
+    "password": process.env.POSTGRES_PASSWORD,
+    "database": process.env.POSTGRES_DB,
+    "host": 'postgres',
+    "dialect": 'postgres',
+    "logging": true,
   },
 
   "test": {
@@ -27,9 +27,13 @@ module.exports = {
   },
 
   "production": {
-    "use_env_variable": "JAWSDB_URL",
+    "username": process.env.HEROKUPG_USER,
+    "password": process.env.HEROKUPG_PASSWORD,
+    "database": process.env.HEROKUPG_DB,
+    "host": process.env.HEROKUPG_HOST,
     "dialect": "postgres",
-    "operatorsAliases": false
+    "operatorsAliases": false,
+    "use_env_variable": "DATABASE_URL"
   }
 };
 
