@@ -1,7 +1,8 @@
 const db = require("../models")
 const jwt = require('jsonwebtoken');
 const redis = require("redis");  
-const redisClient = redis.createClient(process.env.REDIS_URI);
+// const redisClient = redis.createClient(process.env.REDIS_URI);
+const redisClient = redis.createClient(process.env.REDIS_URL);
 
 const handleSignout = (req, res) => {
   const { authorization } = req.headers;
