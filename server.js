@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3001;
 const db = require("./models")
 const cors = require("cors");
 const app = express();
-const axios = require("axios");
+// const axios = require("axios");
 
 // App Setup
 app.use(morgan('combined')); 
@@ -26,6 +26,11 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const syncOptions = { force: false };
+
+// connection to Redis
+
+const redisClient = require('redis').createClient(process.env.REDIS_URL);
+redisClient.auth(redisURL.auth.split(":")[1]);
 
 // connection to heroku postgres
 

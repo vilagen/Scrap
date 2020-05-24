@@ -1,7 +1,8 @@
 const db = require("../models");
 const redis = require("redis");  
 
-const redisClient = redis.createClient(process.env.REDIS_URI);
+//const redisClient = redis.createClient(process.env.REDIS_URI);
+const redisClient = redis.createClient(process.env.REDIS_URL);
 
 const saveArticle = (req, res, err) => {
   const articles = req.body;
