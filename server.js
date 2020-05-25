@@ -10,10 +10,10 @@ const app = express();
 // const axios = require("axios");
 
 // App Setup
-app.use(morgan('combined')); 
-app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(morgan('combined')); 
+app.use(cors());
 app.use(routes);
 
 // app.use(express.json())
@@ -25,8 +25,6 @@ app.use(routes);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
-
-const syncOptions = { force: false };
 
 // connection to heroku postgres
 
@@ -40,6 +38,8 @@ const client = new Client({
 });
 
 client.connect();
+
+const syncOptions = { force: false };
 
 db.sequelize.sync(syncOptions).then(function() {
   app.listen(PORT, function() {
