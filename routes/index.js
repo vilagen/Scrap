@@ -11,7 +11,7 @@ router.use("/api", apiRoutes);
 // });
 
 router.use(function(req, res) {
-  res.sendFile(path.join(__dirname, "../scrap/public/index.html"));
+  res.sendFile(path.join(__dirname, "../client/public/index.html"));
 });
 
 module.exports = router;
