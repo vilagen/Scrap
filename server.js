@@ -29,8 +29,9 @@ const syncOptions = { force: false };
 
 // connection to Redis
 
-const redisClient = require('redis').createClient(process.env.REDIS_URL);
-redisClient.auth(redisURL.auth.split(":")[1]);
+// const redisURL = url.parse(process.env.REDISCLOUD_URL);
+// const redisClient = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+// redisClient.auth(redisURL.auth.split(":")[1]);
 
 // connection to heroku postgres
 

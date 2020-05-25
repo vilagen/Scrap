@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const redis = require("redis");  
 const bcrypt = require("bcryptjs");
 //const redisClient = redis.createClient(process.env.REDIS_URI);
-const redisClient = redis.createClient(process.env.REDIS_URL);
+var redisClient = redis.createClient(process.env.REDIS_URL);
 
 // need to finish login controller!!!
 // need to make sure that login controller returns user table information!!
