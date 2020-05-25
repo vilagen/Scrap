@@ -35,14 +35,14 @@ const syncOptions = { force: false };
 
 // connection to heroku postgres
 
-const { Client } = require('pg');
+// const { Client } = require('pg');
 
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+// const client = new Client({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     rejectUnauthorized: false
+//   }
+// });
 
 // axios.get('/db', async (req, res) => {
 //     try {
@@ -57,7 +57,7 @@ const client = new Client({
 //     }
 //   })
 
-client.connect();
+// client.connect();
 
 db.sequelize.sync(syncOptions).then(function() {
   app.listen(PORT, function() {
