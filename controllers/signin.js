@@ -8,19 +8,6 @@ const redisURL = url.parse(process.env.REDISCLOUD_URL);
 const redisClient = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
 redisClient.auth(redisURL.auth.split(":")[1]);
 
-// let redisClient;
-
-// if (process.env.REDISCLOUD_UR) {
-//   const redisURL = url.parse(process.env.REDISCLOUD_URL);
-//   redisClient = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-//   redisClient.auth(redisURL.auth.split(":")[1]);
-// } else {
-//   redisClient = redis.createClient(process.env.REDIS_URI);
-// }
-
-// need to finish login controller!!!
-// need to make sure that login controller returns user table information!!
-
 const handleSignin = (req, res, err) => {
   const {username, password} = req.body;
 
