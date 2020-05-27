@@ -1,19 +1,19 @@
 const db = require("../models");
 const redis = require("redis");  
 // const redisClient = redis.createClient(process.env.REDIS_URI);
-// const redisURL = url.parse(process.env.REDISCLOUD_URL);
-// const redisClient = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-// redisClient.auth(redisURL.auth.split(":")[1]);
+const redisURL = url.parse(process.env.REDISCLOUD_URL);
+const redisClient = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+redisClient.auth(redisURL.auth.split(":")[1]);
 
-let redisClient;
+// let redisClient;
 
-if (process.env.REDISCLOUD_UR) {
-  const redisURL = url.parse(process.env.REDISCLOUD_URL);
-  redisClient = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-  redisClient.auth(redisURL.auth.split(":")[1]);
-} else {
-  redisClient = redis.createClient(process.env.REDIS_URI);
-}
+// if (process.env.REDISCLOUD_UR) {
+//   const redisURL = url.parse(process.env.REDISCLOUD_URL);
+//   redisClient = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+//   redisClient.auth(redisURL.auth.split(":")[1]);
+// } else {
+//   redisClient = redis.createClient(process.env.REDIS_URI);
+// }
 
 const saveArticle = (req, res, err) => {
   const articles = req.body;
