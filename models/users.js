@@ -35,11 +35,12 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
-				isEmail: true,
-				// msg: "This field must be a valid email.",
-				// notNull: {
-				// 	msg: "Email is required."
-				// }
+				isEmail: {
+					msg: "This field must be a valid email."
+				},				
+				notNull: {
+					msg: "Email is required."
+				}
 			}
     },
     

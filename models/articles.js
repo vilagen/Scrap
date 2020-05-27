@@ -1,32 +1,28 @@
 module.exports = function(sequelize, DataTypes) {
 	let Article = sequelize.define("Article", {
 
-    // source: {
-    //   type: DataTypes.STRING,
-    // },
-
-    published: {
-      type: DataTypes.STRING,
-    },
-
     author: {
       type: DataTypes.STRING,
     },
 			
 		title: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING(500),
 		},
 
 		image: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING(500),
     },
     
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
 
     url: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(500),
+    },
+
+    published: {
+      type: DataTypes.STRING(255),
     },
 
 	});

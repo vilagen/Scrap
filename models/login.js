@@ -19,11 +19,12 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
-				isEmail: true,
-				// msg: "This field must be a valid email.",
-				// notNull: {
-				// 	msg: "Email is required."
-				// }
+				isEmail: {
+					msg: "This field must be a valid email."
+				},				
+				notNull: {
+					msg: "Email is required."
+				}
 			}
     },
     
@@ -31,11 +32,13 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
-				min: 8,
-				// msg: "Password requires at least 8 characters.",
-				// notNull: {
-				// 	msg: "A password is required."
-				// }
+				min: {
+					args: [[8]],
+					msg: "Password requires at least 8 characters."
+				},
+				notNull: {
+					msg: "A password is required."
+				}
 			}
 		}
   });
