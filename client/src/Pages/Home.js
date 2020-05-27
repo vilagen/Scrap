@@ -196,7 +196,7 @@ class Home extends Component {
 							toggleModal={this.toggleModal}
 						/>
 					</span>
-					<p id="scrap"> BB </p>
+					<p id="scrap"> BULLET BOARD </p>
 					<p className="scrap2">A Site For Your News</p>
 				</div>
 
