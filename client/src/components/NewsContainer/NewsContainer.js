@@ -16,12 +16,12 @@ const borderStyle = {
 	borderColor: "#cccc00",
 };
 
-const centerCard = {
-	display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
-	justifyContent: "center",
-}
+// const centerCard = {
+// 	display: "flex",
+//   flexDirection: "row",
+//   alignItems: "center",
+// 	justifyContent: "center",
+// }
 
 // info will come from a JSON file
 export function NewsListItem({

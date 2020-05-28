@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Button,
+import { Button,
 				 Card, CardImg, CardText, CardBody, CardLink,
 				 CardTitle, CardSubtitle } from 'reactstrap';
 import './newsContainerstyle.css';

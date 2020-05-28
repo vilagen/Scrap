@@ -88,10 +88,4 @@ export default {
 		);
 	},
 
-
-
-	// userRegister: (req, res, err) => {
-	// 	return axios.post(`api/register`)
-	// }
-
 };

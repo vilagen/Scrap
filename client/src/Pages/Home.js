@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-// import { Button, Modal, ModalHeader, ModalBody, ModalFooter, 
-// 				 Form, FormGroup, Label, Input } from "reactstrap";
 import ProfileIcon from "../components/Profile/ProfileIcon";
 import { NewsList, NewsListItem } from "../components/NewsContainer/NewsContainer";
 import { NewsCardItem} from "../components/NewsContainer/NewsCard"
@@ -22,19 +20,6 @@ class Home extends Component {
 		};
 	};
 
-	//this doesn't seem to work, was just chekcing out XML requests.
-	// newsSearchTest = () => {
-	// 	const xhr = new XMLHttpRequest();
-
-	// 	xhr.open('GET', '/api/currentnews', false)
-	// 	xhr.onload = () => {
-	// 		if(request.status >= 200 && request.status < 400) {
-	// 			this.setState({news: xhr.responseText, done: true})
-	// 		}
-	// 	};
-	// 	xhr.send();
-	// }
-
 	newsSearch = () => {
 		API.newsSearch()
 		.then( res => this.setState({news: res.data}))
@@ -48,7 +33,6 @@ class Home extends Component {
 		.catch( err => console.log(err));
 		console.log(this.state.news);
 	};
-
 
 	handleInputChange = event => {
 		const { name, value } = event.target;
@@ -74,21 +58,12 @@ class Home extends Component {
 
 	async componentDidMount() {
 
-		// await API.newsSearch()
-		// .then( res => this.setState({news: res.data}))
-		// .catch(err => console.log(err));
-
-		// const handler = e => this.setState({matches: e.matches})
-		// window.matchMedia("(min-width: 768px)").addListener(handler);
-		// this was one solution, but addListener is depracated
-
 		window.matchMedia("(min-width: 740px)").addEventListener( "change", (e) => {
 			this.setState({matches: e.matches})
 		});
 
-		await fetch("api/currentnews")
-		.then(res => res.json())
-		.then( res => this.setState({news: res}))
+		await API.newsSearch()
+		.then( res => this.setState({news: res.data}))
 		.catch(err => console.log(err));
 	};
 
@@ -167,15 +142,6 @@ class Home extends Component {
 
 		console.log(`This is headline ${this.state.headlines}; this is topic ${this.state.topic}` )
 
-		const newsButtonStyle = {
-			height: "10vh",
-			display: "flex",
-			flexDirection: "row",
-			justifyContent: "center",
-			alignItems: "center",
-			backgroundColor: "yellow",
-		};
-		
 		const radioButtonStyle = {
 			display: "flex",
 			flexDirection: "column",
@@ -312,40 +278,3 @@ class Home extends Component {
 }
 
 export default Home
-
-
-
-// <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-// <ModalHeader toggle={this.toggleModal} close={this.closeBtn}>Modal title</ModalHeader>
-// <ModalBody>
-// 	<Form>
-// 		<h4>Signin</h4>
-// 		<br></br>
-// 		<FormGroup controlId="formBasicEmail">
-// 			<Label className="d-flex justify-content-start">Username</Label>
-// 			<Input
-// 			name="username"
-// 			type="text"
-// 			value={this.state.username} 
-// 			placeholder="Username"
-// 			onChange={this.handleInputChange}
-// 			/>
-// 		</FormGroup>
-
-// 		<FormGroup controlId="formBasicPassword">
-// 			<Label className="d-flex justify-content-start">Password</Label>
-// 			<Input 
-// 			name="password"
-// 			type="password" 
-// 			value={this.state.password}
-// 			placeholder="Password"
-// 			onChange={this.handleInputChange}
-// 			/>
-// 		</FormGroup>
-// 	</Form>
-// </ModalBody>
-// <ModalFooter>
-// 	<Button color="primary" onClick={this.onSubmitRegister}>Signin</Button>{' '}
-// 	<Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
-// </ModalFooter>
-// </Modal>
