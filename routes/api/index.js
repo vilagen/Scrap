@@ -9,7 +9,6 @@ const signin = require("./authentication/signinRoute");
 const signout = require("./authentication/signoutRoute");
 const profile = require("./profileRoute");
 const articles = require("./articlesRoute");
-const { response } = require("express");
 // const signinRoutes = require("./signin");
 
 // news API routes
