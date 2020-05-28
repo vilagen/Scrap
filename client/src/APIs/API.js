@@ -11,10 +11,10 @@ export default {
 		if(!topic || topic === undefined) {
 			return axios.get(`api/currentnews`);
 		}
-		else if(topic && headlines === true) {
+		else if( (topic && headlines === "headlines") || (topic && headlines === "") ) {
 			return axios.get(`api/topicheadlines/${topic}`);
 		}
-		else if(topic && headlines === false) {
+		else if(topic && headlines === "everything") {
 			return axios.get(`api/topiceverything/${topic}`);
 		};
 	},
@@ -87,11 +87,5 @@ export default {
 			})
 		);
 	},
-
-
-
-	// userRegister: (req, res, err) => {
-	// 	return axios.post(`api/register`)
-	// }
 
 };

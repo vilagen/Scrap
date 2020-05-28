@@ -52,7 +52,7 @@ class SignUp extends Component {
 		const token = window.sessionStorage.getItem(`token`);
 	
 		if (token) {
-			fetch('http://localhost:3001/api/signout', {
+			fetch('/api/signout', {
 				method: 'post',
 				headers: {
 					'Content-Type': 'application/json',
@@ -67,6 +67,8 @@ class SignUp extends Component {
 			alert("All fields must be filled out.")
 		} else if (this.state.password !== this.state.password2) {
 			alert("Passwords do not match.")
+	 	} else if (this.state.password.length < 8) {
+			 alert("Password must be at least 8 characters.")
 		} else {
 			fetch('/api/register', {
 				method: "post",

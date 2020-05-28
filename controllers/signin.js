@@ -1,12 +1,13 @@
 const db = require("../models")
 const jwt = require('jsonwebtoken');
+const url = require('url');
 const redis = require("redis");  
 const bcrypt = require("bcryptjs");
+// const redisClient = redis.createClient(process.env.REDIS_URI);
 
-const redisClient = redis.createClient(process.env.REDIS_URI);
-
-// need to finish login controller!!!
-// need to make sure that login controller returns user table information!!
+const redisURL = url.parse(process.env.REDISCLOUD_URL);
+const redisClient = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+redisClient.auth(redisURL.auth.split(":")[1]);
 
 const handleSignin = (req, res, err) => {
   const {username, password} = req.body;
