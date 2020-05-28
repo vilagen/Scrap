@@ -14,17 +14,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan('combined')); 
 app.use(cors());
-app.use(routes);
-
-// app.use(express.json())
-// app.use(bodyParser.json({ type: `*/*` }))
-// app.use(express.urlencoded({ extended: true }));
-
 
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
+
+// app.use(express.json())
+// app.use(bodyParser.json({ type: `*/*` }))
+// app.use(express.urlencoded({ extended: true }));
+
+app.use(routes);
 
 // connection to heroku postgres
 
