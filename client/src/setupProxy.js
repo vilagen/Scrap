@@ -4,7 +4,10 @@ module.exports = function(app) {
   app.use(
     '/api/*',
     createProxyMiddleware({
-      target: 'bulletboardnews.herokuapp.com',
+      target: {
+        host: "http://localhost",
+        port: process.env.PORT
+      },
       changeOrigin: true,
     })
   );
