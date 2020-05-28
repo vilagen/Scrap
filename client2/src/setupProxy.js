@@ -6,7 +6,7 @@ module.exports = function(app) {
     createProxyMiddleware({
       target: {
         host: "http://localhost",
-        port: process.env.PORT
+        port: process.env.PORT || 3001
       },
       changeOrigin: true,
     })
