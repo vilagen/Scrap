@@ -5,9 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
-    "start:docker": "node server.js",
     "start:prod": "node server.js",
-    "start:dev": "concurrently \"node --ignore 'client/*'\" \"npm run client\"",
+    "start:dev": "nodemon server.js",
     "client": "cd client && npm run start",
     "seed": "node scripts/seedDB.js",
     "install": "cd client && npm install",

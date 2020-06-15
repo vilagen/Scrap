@@ -7,7 +7,6 @@ const PORT = process.env.PORT || 3001;
 const db = require("./models")
 const cors = require("cors");
 const app = express();
-// const axios = require("axios");
 
 // App Setup
 app.use(express.urlencoded({ extended: true }));
