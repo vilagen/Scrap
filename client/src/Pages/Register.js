@@ -48,7 +48,7 @@ class SignUp extends Component {
 		};
 
 		if (this.state.username === "" || this.state.email === "" || this.state.password === "" || this.state.password2 === "") {
-			alert("All fields must be filled out.")
+			alert("All required fields must be filled out.")
 		} else if (this.state.password !== this.state.password2) {
 			alert("Passwords do not match.")
 	 	} else if (this.state.password.length < 8) {
@@ -94,11 +94,6 @@ class SignUp extends Component {
 			});
 		};
 	};
-
-
-	// handleRegister = (username, email, password, password2) => {
-
-	// }
 
 	render() {
 

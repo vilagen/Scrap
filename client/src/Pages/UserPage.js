@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import {Container, Row, Col} from "reactstrap";
+import {Container, Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter,
+        Form, FormGroup, Label, Input, Card, CardBody} from "reactstrap";
 import { Link, Redirect } from "react-router-dom";
 import { NewsList, NewsListItem } from "../components/NewsContainer/NewsContainer";
 import { NewsCardItem} from "../components/NewsContainer/NewsCard"
@@ -28,6 +29,7 @@ class UserPage extends Component {
       userArticles: [],
       redirect: null,
       isSignedIn: false,
+      modal: false,
       mobile: window.matchMedia("(min-width: 740px)").matches,
     }
   };
@@ -42,6 +44,12 @@ class UserPage extends Component {
   onClickDelete = (token, id) => {
     API.deleteArticle(token, id)
       .then(res=> this.loadArticles(token, this.state.id))
+  };
+
+  toggleModal = () => {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
   };
 
  async componentDidMount() {
@@ -115,9 +123,9 @@ class UserPage extends Component {
 
       <div>
 
-        <Container>
+        <Container className="userPageInfoDark">
  
-          <Row className="userPageInfoDark">
+          <Row>
 
             <Col md="8" sm="8" xs="8" className="spaceBetweenDiv">
               <div style={{justifyContent:"space-between"}}>
@@ -139,9 +147,55 @@ class UserPage extends Component {
             </Col>
           
           </Row>
+          
+          <Button color="danger" onClick={this.toggleModal}>Edit Profile</Button>
+          <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+            <ModalHeader toggle={this.toggleModal}>Modal title</ModalHeader>
+            <ModalBody>
+              
+            What information do you need to change?
+
+            <FormGroup controlId="formBasicEmail">
+              <Label className="d-flex justify-content-start">Email</Label>
+              <Input 
+              name="email"
+              type="email" 
+              placeholder="Email"
+              value={this.state.email}
+              onChange={this.handleInputChange}
+              />
+            </FormGroup>
+
+            <FormGroup controlId="formBasicFirstName">
+              <Label className="d-flex justify-content-start">First Name</Label>
+              <Input 
+              name="firstName"
+              type="text" 
+              placeholder="Morgan"
+              value={this.state.firstName}
+              onChange={this.handleInputChange}
+              />
+            </FormGroup>
+
+            <FormGroup controlId="formBasicLastName">
+              <Label className="d-flex justify-content-start">Last Name</Label>
+              <Input 
+              name="lastName"
+              type="text" 
+              placeholder="Doe"
+              value={this.state.lastName}
+              onChange={this.handleInputChange}
+              />
+            </FormGroup>
+
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={this.toggleModal}>Do Something</Button>{' '}
+              <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
+            </ModalFooter>
+          </Modal>
 
         </Container>
-
 
         <Row style={{width:"100%"}}>
 
