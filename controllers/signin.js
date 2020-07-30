@@ -89,3 +89,4 @@ module.exports = {
   redisClient: redisClient,
   loginAuthentication: loginAuthentication
 }
+

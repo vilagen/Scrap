@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, Form, FormGroup, Label, Input, Card, CardBody } from "reactstrap";
 import { Link, Redirect } from "react-router-dom";
+import API from "../APIs/API";
 import './pagesStyle.css';
 
 class Login extends Component {
@@ -42,6 +43,32 @@ class Login extends Component {
 			window.sessionStorage.removeItem('token');
 			this.props.userSignin(false);
 		};
+	};
+
+	onSubmitLogin2 = (event) => {
+		event.preventDefault();
+		if (this.state.username === "" || this.state.password === "") {
+			alert("Missing username or password.")
+		}
+		else {
+			API.onSubmitLogin(this.state.username, this.state.password)
+			.then( data => {
+				if(data.success === 'true' && data.userId) {
+					this.saveAuthTokenInSession(data.token)
+					API.userProfile(data)
+					.then( user => {
+						if(user && user.email) {
+							alert("Sign in was successful!")
+							this.props.userSignin("true");
+							this.setState({ redirect: "/"})
+						}
+					})
+				}
+				else {
+					alert(data);
+				}
+			})
+		}
 	};
 
 

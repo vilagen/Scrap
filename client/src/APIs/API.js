@@ -1,5 +1,9 @@
 import axios from "axios";
 
+saveAuthTokenInSession = (token) => {
+	window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
+}
+
 export default {
 
 	newsSearch: () => { 
@@ -56,22 +60,20 @@ export default {
 	},
 
 	startSession: (token) => {
+		const headers = {
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': token
+			}
+		};
 		return (
-			axios({
-				method: "post",
-				url: "api/signin",
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': token
-				}
-			})
+			axios.post('api/signin', headers)
 			.then( response => response.json())
 			.then( data => {
 				console.log(`This is a test ${data}`)
 				if(data && data.userId) {
-					axios({
-						method: "get",
-						url: `api/profile/${data.userId}`, 
+					axios.get(`api/profile/${data.userId}`, 
+					{
 						headers: {
 							'Content-Type': 'application/json',
 							'Authorization': token
@@ -87,5 +89,35 @@ export default {
 			})
 		);
 	},
+
+	onSubmitLogin: (data) => {
+		const userInfo = {
+			username: data.username,
+			password: data.password
+		};
+		const headers = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		};
+		return (
+			axios.post('/api/signin', userInfo, headers)
+			.then( res => res.json())
+		)
+	},
+
+	userProfile: (data) => {
+		return(
+			axios.get(`/api/profile/${data.userId}`, 
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': data.token,	
+					}
+				}
+			)
+			.then(res=>res.json())
+		)
+	}
 
 };

@@ -13,9 +13,7 @@ module.exports = {
   },
 
   newsTopicHeadlines: (req, res) => {
-    userNewsTopicHeadlines( req.params.query, (response) => {
-      res.json(response);
-    });
+    userNewsTopicHeadlines( req.params.query, (response) => {res.json(response)});
   },
 
   newsTopicEverything: (req, res) => {
