@@ -1,9 +1,5 @@
 import axios from "axios";
 
-saveAuthTokenInSession = (token) => {
-	window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
-}
-
 export default {
 
 	newsSearch: () => { 
