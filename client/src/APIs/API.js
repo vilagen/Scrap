@@ -27,6 +27,20 @@ export default {
 		return axios.get(`api/profile/${id}`, headers);
 	},
 
+	updateUser: (data) => {
+		console.log(data);
+		const userInfo = {
+			email: data.editEmail,
+			first_name: data.editFirstName,
+			last_name: data.editLastName,
+		}
+		const headers = {
+			'Content-Type': 'application/json',
+			'Authorization': data.token
+		};
+		return axios.post(`api/profile/${data.id}`, userInfo, headers);
+	},
+
 	saveArticle: (data) => {
 		const newsItems = {
 			published: data.published,

@@ -26,6 +26,9 @@ class UserPage extends Component {
       savedEntries: '',
       username: '',
       email: '',
+      editFirstName: '',
+      editLastName: '',
+      editEmail: '',
       userArticles: [],
       redirect: null,
       isSignedIn: false,
@@ -50,6 +53,24 @@ class UserPage extends Component {
     this.setState(prevState => ({
       modal: !prevState.modal
     }));
+  };
+
+  handleInputChange = event => {
+		const { name, value } = event.target;
+		this.setState({
+				[name]: value
+		});
+	};
+
+  saveChanges = (token, id, editEmail, editFirstName, editLastName) => {
+    API.updateUser({
+      token, 
+      id, 
+      editEmail,
+      editFirstName, 
+      editLastName, 
+    })
+    .catch(err => console.log(`There was an error updating user. ${err}`));
   };
 
  async componentDidMount() {
@@ -113,7 +134,7 @@ class UserPage extends Component {
 
   render() {
 
-    // console.log(this.props.id)
+    console.log(this.state.id)
 
     if (this.state.redirect) {
 			return <Redirect to={this.state.redirect} />
@@ -158,10 +179,10 @@ class UserPage extends Component {
             <FormGroup controlId="formBasicEmail">
               <Label className="d-flex justify-content-start">Email</Label>
               <Input 
-              name="email"
+              name="editEmail"
               type="email" 
               placeholder="Email"
-              value={this.state.email}
+              value={this.state.editEmail}
               onChange={this.handleInputChange}
               />
             </FormGroup>
@@ -169,10 +190,10 @@ class UserPage extends Component {
             <FormGroup controlId="formBasicFirstName">
               <Label className="d-flex justify-content-start">First Name</Label>
               <Input 
-              name="firstName"
+              name="editFirstName"
               type="text" 
               placeholder="Morgan"
-              value={this.state.firstName}
+              value={this.state.editFirstName}
               onChange={this.handleInputChange}
               />
             </FormGroup>
@@ -180,17 +201,24 @@ class UserPage extends Component {
             <FormGroup controlId="formBasicLastName">
               <Label className="d-flex justify-content-start">Last Name</Label>
               <Input 
-              name="lastName"
+              name="editLastName"
               type="text" 
               placeholder="Doe"
-              value={this.state.lastName}
+              value={this.state.editLastName}
               onChange={this.handleInputChange}
               />
             </FormGroup>
 
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={this.toggleModal}>Do Something</Button>{' '}
+              <Button color="primary" onClick={() => this.saveChanges(
+                sessionStorage.getItem(`token`), 
+                this.state.id, 
+                this.state.editEmail, 
+                this.state.editFirstName, 
+                this.state.editLastName
+                )}>Update
+              </Button>
               <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
             </ModalFooter>
           </Modal>
