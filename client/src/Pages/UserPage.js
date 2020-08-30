@@ -26,9 +26,9 @@ class UserPage extends Component {
       savedEntries: '',
       username: '',
       email: '',
-      editFirstName: '',
-      editLastName: '',
-      editEmail: '',
+      editFirstName: "",
+      editLastName: "",
+      editEmail: "",
       userArticles: [],
       redirect: null,
       isSignedIn: false,
@@ -62,15 +62,16 @@ class UserPage extends Component {
 		});
 	};
 
-  saveChanges = (token, id, editEmail, editFirstName, editLastName) => {
+  saveChanges = (token, id, newEmail, newFirstName, newLastName) => {
     API.updateUser({
       token, 
       id, 
-      editEmail,
-      editFirstName, 
-      editLastName, 
+      newEmail,
+      newFirstName, 
+      newLastName, 
     })
     .catch(err => console.log(`There was an error updating user. ${err}`));
+    alert("Information updated successfully!");
   };
 
  async componentDidMount() {
@@ -134,7 +135,7 @@ class UserPage extends Component {
 
   render() {
 
-    console.log(this.state.id)
+    console.log(this.state.email, this.state.firstName, this.state.lastName)
 
     if (this.state.redirect) {
 			return <Redirect to={this.state.redirect} />
@@ -211,13 +212,41 @@ class UserPage extends Component {
 
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" onClick={() => this.saveChanges(
-                sessionStorage.getItem(`token`), 
-                this.state.id, 
-                this.state.editEmail, 
-                this.state.editFirstName, 
-                this.state.editLastName
-                )}>Update
+              <Button color="primary" onClick={() =>
+                {
+                  let {editEmail, editFirstName, editLastName, email, firstName, lastName} = this.state
+                  if(!editEmail && !editFirstName && !editFirstName) {
+                    this.saveChanges(
+                    sessionStorage.getItem(`token`), 
+                    this.state.id, 
+                    editEmail, 
+                    editFirstName, 
+                    editLastName
+                   )}
+                  else if(!editEmail && !editFirstName && !editLastName) {
+                    alert("No information has been selected to update.")
+                  }
+                  // want to check what fields are empty and if they make sure to change their info to corresponding current into.
+                  else { 
+                    if(editEmail === "") {
+                      editEmail = email;
+                    }
+                    if(!editFirstName) {
+                      editFirstName = firstName;
+                    }
+                    if(!editLastName) { 
+                      editLastName = lastName;
+                    }
+                    this.saveChanges(
+                      sessionStorage.getItem(`token`), 
+                      this.state.id, 
+                      editEmail, 
+                      editFirstName, 
+                      editLastName
+                      )
+                    }
+                  }      
+                }>Update
               </Button>
               <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
             </ModalFooter>
@@ -285,3 +314,10 @@ class UserPage extends Component {
 
 export default UserPage;
 
+
+// this.saveChanges(
+//   sessionStorage.getItem(`token`), 
+//   this.state.id, 
+//   this.state.editEmail, 
+//   this.state.editFirstName, 
+//   this.state.editLastName

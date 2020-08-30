@@ -30,15 +30,17 @@ export default {
 	updateUser: (data) => {
 		console.log(data);
 		const userInfo = {
-			email: data.editEmail,
-			first_name: data.editFirstName,
-			last_name: data.editLastName,
+			email: data.newEmail,
+			first_name: data.newFirstName,
+			last_name: data.newLastName,
 		}
 		const headers = {
 			'Content-Type': 'application/json',
 			'Authorization': data.token
 		};
-		return axios.post(`api/profile/${data.id}`, userInfo, headers);
+		return (
+			axios.post(`api/profile/${data.id}`, userInfo, headers)
+		)
 	},
 
 	saveArticle: (data) => {

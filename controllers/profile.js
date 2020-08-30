@@ -22,9 +22,9 @@ const handleProfileUpdate = (req, res, err) => {
   const {first_name, last_name, email} = req.body;
   db.User.findByPk(id).then ( (user, err) => {
     if(user) {
+        user.email= email
         user.first_name = first_name,
         user.last_name = last_name,
-        user.email= email
         user.save();
         return res.json("User information saved.")
     } else {
