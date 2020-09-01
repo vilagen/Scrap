@@ -34,13 +34,15 @@ class UserPage extends Component {
       isSignedIn: false,
       modal: false,
       mobile: window.matchMedia("(min-width: 740px)").matches,
+      bannerSize: window.matchMedia("(max-width: 1000px)").matches,
+      bannerSize2: window.matchMedia("(max-width: 740px)").matches
     }
   };
 
   loadArticles = (token, id) => {
     API.retrieveUserInfo(token, id)
       .then(res => this.setState({ userArticles: res.data.Articles }))
-      .then(res => console.log(this.state.userArticles))
+      // .then(res => console.log(this.state.userArticles))
       .catch(err => console.log(`There was an error retrieving articles. ${err}`));
   };
 
@@ -137,6 +139,19 @@ class UserPage extends Component {
 
     console.log(this.state.email, this.state.firstName, this.state.lastName)
 
+    const boxStyle = {
+      // border:"solid",
+      // width: "300px",
+      // textAlign: "center",
+      fontSize: "20px",
+    }
+
+    const boxStyle2 = {
+      border:"solid",
+      width: "250px",
+      textAlign: "center",
+    }
+
     if (this.state.redirect) {
 			return <Redirect to={this.state.redirect} />
 		}
@@ -148,19 +163,24 @@ class UserPage extends Component {
         <Container className="userPageInfoDark">
  
           <Row>
-
-            <Col md="8" sm="8" xs="8" className="spaceBetweenDiv">
-              <div style={{justifyContent:"space-between"}}>
-                <p>Name: { `${this.state.firstName} ${this.state.lastName}` }</p>
-                <p>Username: {this.state.username}</p>
+            <Col md="5" sm="5" xs="5">
+              <div class = "card bg-dark border-light my-2" style={{width: "100%"}}>
+                <ul class = "list-group list-group-flush">
+                  <li class ="list-group-item border-light bg-dark" style={boxStyle}>Name: { `${this.state.firstName} ${this.state.lastName}` }</li>
+                  <li class ="list-group-item border-light bg-dark" style={boxStyle}>Username: {this.state.username}</li>
+                </ul>
               </div>
-              <div style={{justifyContent:"space-between"}}>
-                <p>Email: {this.state.email}</p>
-                <p>Entries: {this.state.savedEntries}</p>
+            </Col>
+            <Col md="5" sm="5" xs="5">
+              <div class = "card bg-dark border-light my-2" style={{width: "100%"}}>
+                <ul class = "list-group list-group-flush">
+                  <li class ="list-group-item border-light bg-dark" style={boxStyle}>Email: { this.state.email }</li>
+                  <li class ="list-group-item border-light bg-dark" style={boxStyle}>Entries: {this.state.savedEntries}</li>
+                </ul>
               </div>
             </Col>
 
-            <Col  md="4" sm="4" xs="4"
+            <Col  md="2" sm="2" xs="2"
             className="displayCenter">
                 <ProfileIcon
                 isSignedIn={this.props.isSignedIn} 
@@ -313,11 +333,3 @@ class UserPage extends Component {
 };
 
 export default UserPage;
-
-
-// this.saveChanges(
-//   sessionStorage.getItem(`token`), 
-//   this.state.id, 
-//   this.state.editEmail, 
-//   this.state.editFirstName, 
-//   this.state.editLastName

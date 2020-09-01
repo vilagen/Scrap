@@ -44,24 +44,29 @@
   text-align: center;
 }
 
-.spaceBetweenDiv {
+/* .spaceBetweenDiv {
   display: flex;
   justify-content: space-between;
-}
+} */
 
 .userPageInfoDark{
-  height: 15rem;
+  /* height: 10rem; */
   background-color: black;
   color: white;
-  font-size: 22px;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  /* font-size: 25px; */
 }
 
 .spaceBetweenDiv{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  /* justify-content: space-around; */
+  /* justify-content: center; */
+  /* justify-content: space-between; */
+  justify-content: space-around;
   align-items: center;
+  /* border: solid; */
 }
 
 .vertAlign {
