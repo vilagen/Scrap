@@ -140,20 +140,7 @@ class UserPage extends Component {
 
   render() {
 
-    console.log(this.state.email, this.state.firstName, this.state.lastName)
-
-    const boxStyle = {
-      // border:"solid",
-      // width: "300px",
-      // textAlign: "center",
-      fontSize: "20px",
-    }
-
-    const boxStyle2 = {
-      border:"solid",
-      width: "250px",
-      textAlign: "center",
-    }
+    // console.log(this.state.email, this.state.firstName, this.state.lastName)
 
     if (this.state.redirect) {
 			return <Redirect to={this.state.redirect} />
