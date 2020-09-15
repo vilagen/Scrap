@@ -1,11 +1,8 @@
-const bcrypt = require("bcryptjs");
-
 module.exports = function(sequelize, DataTypes) {
 	let User = sequelize.define("User", {
 
     first_name: {
 			type: DataTypes.STRING,
-			defaultValue: "Morgan",
 			validate: {
 				min:2,
 			}
@@ -13,7 +10,6 @@ module.exports = function(sequelize, DataTypes) {
 
     last_name: {
 			type: DataTypes.STRING,
-			defaultValue: "Doe",
 			validate: {
 				min:2,
 			}

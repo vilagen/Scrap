@@ -11,13 +11,23 @@ redisClient.auth(redisURL.auth.split(":")[1]);
 
 const handleRegister = (req, res, err) => {
 
-  const { username, email, firstName, lastName, password, password2 } = req.body;
+  const { username, email, password, password2 } = req.body;
+  let {firstName, lastName} = req.body;
 
   if( !username || !email || !password || !password2) {
     return res.status(400).json("Missing required form items.");
   } else if( password != password2) {
     res.status(400).json("Passwords do not match.")
   };
+
+  if( !firstName && !lastName ) {
+    firstName = "Morgan";
+    lastName = "Doe";
+  } else if(!firstName) {
+    firstName = "Morgan"
+  } else if(!lastName) {
+    lastName = "Doe"
+  } 
 
   db.Login.findOne( {where: {username: username} }).then( (existingUser) => {
     if(existingUser) {res.status(400).json({ error: `Username is already taken.` })}
@@ -36,8 +46,8 @@ const handleRegister = (req, res, err) => {
 
   const user = new db.User({
 
-    // first_name: firstName,
-    // last_name: lastName,
+    first_name: firstName,
+    last_name: lastName,
     username: username,
     email: email,
     joined: new Date(),

@@ -10,8 +10,8 @@ class SignUp extends Component {
 		this.state = {
 			username: "",
 			email: "",
-			// firstName:"",
-			// lastName:"",
+			firstName:"",
+			lastName:"",
 			password: "",
 			password2: "",
 			registerError: "",
@@ -31,22 +31,6 @@ class SignUp extends Component {
     window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
 	}
 	
-	// async componentDidMount() {
-	// 	const token = window.sessionStorage.getItem(`token`);
-	// 	await token
-	// 	if (token) {
-	// 		fetch('http://localhost:3001/api/signout', {
-	// 			method: 'post',
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 				'Authorization': token,
-	// 			},
-	// 		});
-	// 		window.sessionStorage.removeItem('token');
-	// 		this.props.userRegister(false);
-	// 	};
-	// };
-
 	onSubmitRegister = (event) => {
 		event.preventDefault();
 		const token = window.sessionStorage.getItem(`token`);
@@ -64,7 +48,7 @@ class SignUp extends Component {
 		};
 
 		if (this.state.username === "" || this.state.email === "" || this.state.password === "" || this.state.password2 === "") {
-			alert("All fields must be filled out.")
+			alert("All required fields must be filled out.")
 		} else if (this.state.password !== this.state.password2) {
 			alert("Passwords do not match.")
 	 	} else if (this.state.password.length < 8) {
@@ -76,8 +60,8 @@ class SignUp extends Component {
 				body: JSON.stringify({
 					username: this.state.username,
 					email: this.state.email,
-					// firstName: this.state.firstName,
-					// lastName: this.state.lastName,
+					firstName: this.state.firstName,
+					lastName: this.state.lastName,
 					password: this.state.password,
 					password2: this.state.password2,
 				})
@@ -110,11 +94,6 @@ class SignUp extends Component {
 			});
 		};
 	};
-
-
-	// handleRegister = (username, email, password, password2) => {
-
-	// }
 
 	render() {
 
@@ -156,6 +135,28 @@ class SignUp extends Component {
 									type="email" 
 									placeholder="Email"
 									value={this.state.email}
+									onChange={this.handleInputChange}
+									/>
+								</FormGroup>
+
+								<FormGroup controlId="formBasicFirstName">
+									<Label className="d-flex justify-content-start">First Name</Label>
+									<Input 
+									name="firstName"
+									type="text" 
+									placeholder="Morgan"
+									value={this.state.firstName}
+									onChange={this.handleInputChange}
+									/>
+								</FormGroup>
+
+								<FormGroup controlId="formBasicLastName">
+									<Label className="d-flex justify-content-start">Last Name</Label>
+									<Input 
+									name="lastName"
+									type="text" 
+									placeholder="Doe"
+									value={this.state.lastName}
 									onChange={this.handleInputChange}
 									/>
 								</FormGroup>
@@ -222,26 +223,3 @@ class SignUp extends Component {
 };
 
 export default SignUp;
-
-
-// <FormGroup controlId="formBasicFirstName">
-// 	<Label className="d-flex justify-content-start">First Name</Label>
-// 	<Input 
-// 	name="firstName"
-// 	type="text" 
-// 	placeholder="Morgan"
-// 	value={this.state.firstName}
-// 	onChange={this.handleInputChange}
-// 	/>
-// </FormGroup>
-
-// <FormGroup controlId="formBasicLastName">
-// 	<Label className="d-flex justify-content-start">Last Name</Label>
-// 	<Input 
-// 	name="lastName"
-// 	type="text" 
-// 	placeholder="Doe"
-// 	value={this.state.lastName}
-// 	onChange={this.handleInputChange}
-// 	/>
-// </FormGroup>

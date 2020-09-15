@@ -12,16 +12,21 @@ module.exports = {
     .catch(err => res.status(422).json(err));
   },
 
-  newsTopicHeadlines: (req, res) => {
-    userNewsTopicHeadlines( req.params.query, (response) => {
-      res.json(response);
-    });
+  // nice to know how to do this, but seems unnecessary 
+  // newsTopicHeadlines: (req, res) => {
+  //   userNewsTopicHeadlines( req.params.query, (response) => {res.json(response)});
+  // },
+
+  newsTopicHeadlines : (req, res) => {
+    axios.get(`https://newsapi.org/v2/top-headlines?q=${req.params.query}&country=us&apiKey=${news_api_key}`)
+    .then(data => {
+      res.json(data.data.articles)
+    })
+    .catch(err => cb.status(422).json(err));
   },
 
   newsTopicEverything: (req, res) => {
-    userNewsTopicEverything( req.params.query, (response) => {
-      res.json(response)
-    });
+    userNewsTopicEverything( req.params.query, (response) => {res.json(response)} );
   },
 
   // newsTopicCatagory: (req, res) => {
@@ -36,8 +41,8 @@ module.exports = {
   //   });
   // },
 
-  // userNewsSearch: (topic, country) => {
-  //   axios.get(`http://newsapi.org/v2/top-headlines?country=${country}&category=${topic}&apiKey=${news_api_key}`)
+  // userNewsSearch: (req, res) => {
+  //   axios.get(`http://newsapi.org/v2/top-headlines?country=${res.params.query}&category=${topic}&apiKey=${news_api_key}`)
   //   .then(data => {
   //     res.json(data.data.articles)
   //   })
@@ -46,14 +51,16 @@ module.exports = {
 
 }
 
-const userNewsTopicHeadlines = (topic, cb) => {
-  axios.get(`https://newsapi.org/v2/top-headlines?q=${topic}&country=us&apiKey=${news_api_key}`)
-  .then(data => {
-    cb(data.data.articles)
-  })
-  .catch(err => cb.status(422).json(err));
-};
+  // nice to know how to do this, but seems unnecessary 
+// const userNewsTopicHeadlines = (topic, cb) => {
+//   axios.get(`https://newsapi.org/v2/top-headlines?q=${topic}&country=us&apiKey=${news_api_key}`)
+//   .then(data => {
+//     cb(data.data.articles)
+//   })
+//   .catch(err => cb.status(422).json(err));
+// };
 
+  // nice to know how to do this, but seems unnecessary 
 const userNewsTopicEverything = (topic, cb) => {
   axios.get(`https://newsapi.org/v2/everything?q=${topic}&apiKey=${news_api_key}`)
   .then(data => {

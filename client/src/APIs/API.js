@@ -27,6 +27,22 @@ export default {
 		return axios.get(`api/profile/${id}`, headers);
 	},
 
+	updateUser: (data) => {
+		console.log(data);
+		const userInfo = {
+			email: data.newEmail,
+			first_name: data.newFirstName,
+			last_name: data.newLastName,
+		}
+		const headers = {
+			'Content-Type': 'application/json',
+			'Authorization': data.token
+		};
+		return (
+			axios.post(`api/profile/${data.id}`, userInfo, headers)
+		)
+	},
+
 	saveArticle: (data) => {
 		const newsItems = {
 			published: data.published,
@@ -56,22 +72,20 @@ export default {
 	},
 
 	startSession: (token) => {
+		const headers = {
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': token
+			}
+		};
 		return (
-			axios({
-				method: "post",
-				url: "api/signin",
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': token
-				}
-			})
+			axios.post('api/signin', headers)
 			.then( response => response.json())
 			.then( data => {
 				console.log(`This is a test ${data}`)
 				if(data && data.userId) {
-					axios({
-						method: "get",
-						url: `api/profile/${data.userId}`, 
+					axios.get(`api/profile/${data.userId}`, 
+					{
 						headers: {
 							'Content-Type': 'application/json',
 							'Authorization': token
@@ -87,5 +101,35 @@ export default {
 			})
 		);
 	},
+
+	onSubmitLogin: (data) => {
+		const userInfo = {
+			username: data.username,
+			password: data.password
+		};
+		const headers = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		};
+		return (
+			axios.post('/api/signin', userInfo, headers)
+			.then( res => res.json())
+		)
+	},
+
+	userProfile: (data) => {
+		return(
+			axios.get(`/api/profile/${data.userId}`, 
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': data.token,	
+					}
+				}
+			)
+			.then(res=>res.json())
+		)
+	}
 
 };

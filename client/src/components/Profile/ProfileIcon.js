@@ -69,8 +69,6 @@ class ProfileIcon extends Component {
 			return <Redirect to={this.state.redirect} />
     }
     
-    console.log(this.state.signedIn)
-
     return (
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropDown}>
         <DropdownToggle caret>

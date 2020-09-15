@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import {Container, Row, Col} from "reactstrap";
+import {Container, Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter,
+        Form, FormGroup, Label, Input, Card, CardBody} from "reactstrap";
 import { Link, Redirect } from "react-router-dom";
 import { NewsList, NewsListItem } from "../components/NewsContainer/NewsContainer";
 import { NewsCardItem} from "../components/NewsContainer/NewsCard"
@@ -25,17 +26,22 @@ class UserPage extends Component {
       savedEntries: '',
       username: '',
       email: '',
+      editFirstName: "",
+      editLastName: "",
+      editEmail: "",
       userArticles: [],
       redirect: null,
       isSignedIn: false,
+      modal: false,
       mobile: window.matchMedia("(min-width: 740px)").matches,
+      mobileBanner: window.matchMedia("(min-width: 1000px)").matches,
     }
   };
 
   loadArticles = (token, id) => {
     API.retrieveUserInfo(token, id)
       .then(res => this.setState({ userArticles: res.data.Articles }))
-      .then(res => console.log(this.state.userArticles))
+      // .then(res => console.log(this.state.userArticles))
       .catch(err => console.log(`There was an error retrieving articles. ${err}`));
   };
 
@@ -44,11 +50,40 @@ class UserPage extends Component {
       .then(res=> this.loadArticles(token, this.state.id))
   };
 
+  toggleModal = () => {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
+  };
+
+  handleInputChange = event => {
+		const { name, value } = event.target;
+		this.setState({
+				[name]: value
+		});
+	};
+
+  saveChanges = (token, id, newEmail, newFirstName, newLastName) => {
+    API.updateUser({
+      token, 
+      id, 
+      newEmail,
+      newFirstName, 
+      newLastName, 
+    })
+    .catch(err => console.log(`There was an error updating user. ${err}`));
+    alert("Information updated successfully!");
+  };
+
  async componentDidMount() {
   let token = window.sessionStorage.getItem('token');
 
   window.matchMedia("(min-width: 740px)").addEventListener( "change", (e) => {
     this.setState({mobile: e.matches})
+  });
+
+  window.matchMedia("(min-width: 1000px)").addEventListener( "change", (e) => {
+    this.setState({mobileBanner: e.matches})
   });
 
   // setTimeout( ()=> {
@@ -105,7 +140,7 @@ class UserPage extends Component {
 
   render() {
 
-    // console.log(this.props.id)
+    // console.log(this.state.email, this.state.firstName, this.state.lastName)
 
     if (this.state.redirect) {
 			return <Redirect to={this.state.redirect} />
@@ -115,33 +150,237 @@ class UserPage extends Component {
 
       <div>
 
-        <Container>
- 
-          <Row className="userPageInfoDark">
+        {this.state.mobileBanner === true ?
+          (
+          <Container className="userPageInfoDark">
+  
+            <Row>
+              <Col md="5" sm="5" xs="5">
+                <div class = "card bg-dark border-light my-2" style={{width: "100%"}}>
+                  <ul class = "list-group list-group-flush">
+                    <li class ="list-group-item border-light bg-dark"> Name: { `${this.state.firstName} ${this.state.lastName}` }</li>
+                    <li class ="list-group-item border-light bg-dark"> Username: {this.state.username}</li>
+                  </ul>
+                </div>
+              </Col>
+              <Col md="5" sm="5" xs="5">
+                <div class = "card bg-dark border-light my-2" style={{width: "100%"}}>
+                  <ul class = "list-group list-group-flush">
+                    <li class ="list-group-item border-light bg-dark"> Email: { this.state.email }</li>
+                    <li class ="list-group-item border-light bg-dark"> Entries: {this.state.savedEntries}</li>
+                  </ul>
+                </div>
+              </Col>
 
-            <Col md="8" sm="8" xs="8" className="spaceBetweenDiv">
-              <div style={{justifyContent:"space-between"}}>
-                <p>Name: { `${this.state.firstName} ${this.state.lastName}` }</p>
-                <p>Username: {this.state.username}</p>
-              </div>
-              <div style={{justifyContent:"space-between"}}>
-                <p>Email: {this.state.email}</p>
-                <p>Entries: {this.state.savedEntries}</p>
-              </div>
-            </Col>
+              <Col  md="2" sm="2" xs="2"
+              className="displayCenter">
+                  <ProfileIcon
+                  isSignedIn={this.props.isSignedIn} 
+                  userSignedIn={this.props.userSignedIn} 
+                  style={profileSize}/>
+              </Col>
+            
+            </Row>
+            
+            <Button color="danger" onClick={this.toggleModal}>Edit Profile</Button>
+            <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+              <ModalHeader toggle={this.toggleModal}>Modal title</ModalHeader>
+              <ModalBody>
+                
+              What information do you need to change?
 
-            <Col  md="4" sm="4" xs="4"
-            className="displayCenter">
-                <ProfileIcon
-                isSignedIn={this.props.isSignedIn} 
-                userSignedIn={this.props.userSignedIn} 
-                style={profileSize}/>
-            </Col>
-          
+              <FormGroup controlId="formBasicEmail">
+                <Label className="d-flex justify-content-start">Email</Label>
+                <Input 
+                name="editEmail"
+                type="email" 
+                placeholder="Email"
+                value={this.state.editEmail}
+                onChange={this.handleInputChange}
+                />
+              </FormGroup>
+
+              <FormGroup controlId="formBasicFirstName">
+                <Label className="d-flex justify-content-start">First Name</Label>
+                <Input 
+                name="editFirstName"
+                type="text" 
+                placeholder="Morgan"
+                value={this.state.editFirstName}
+                onChange={this.handleInputChange}
+                />
+              </FormGroup>
+
+              <FormGroup controlId="formBasicLastName">
+                <Label className="d-flex justify-content-start">Last Name</Label>
+                <Input 
+                name="editLastName"
+                type="text" 
+                placeholder="Doe"
+                value={this.state.editLastName}
+                onChange={this.handleInputChange}
+                />
+              </FormGroup>
+
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onClick={() =>
+                  {
+                    let {editEmail, editFirstName, editLastName, email, firstName, lastName} = this.state
+                    if(!editEmail && !editFirstName && !editFirstName) {
+                      this.saveChanges(
+                      sessionStorage.getItem(`token`), 
+                      this.state.id, 
+                      editEmail, 
+                      editFirstName, 
+                      editLastName
+                    )}
+                    else if(!editEmail && !editFirstName && !editLastName) {
+                      alert("No information has been selected to update.")
+                    }
+                    // want to check what fields are empty and if they make sure to change their info to corresponding current into.
+                    else { 
+                      if(editEmail === "") {
+                        editEmail = email;
+                      }
+                      if(!editFirstName) {
+                        editFirstName = firstName;
+                      }
+                      if(!editLastName) { 
+                        editLastName = lastName;
+                      }
+                      this.saveChanges(
+                        sessionStorage.getItem(`token`), 
+                        this.state.id, 
+                        editEmail, 
+                        editFirstName, 
+                        editLastName
+                        )
+                      }
+                    }      
+                  }>Update
+                </Button>
+                <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
+              </ModalFooter>
+            </Modal>
+
+          </Container>
+        )
+
+        :
+        
+        (
+        <div class="userMobilePageInfoDark">
+
+          <Row>
+        
+            <Col>
+            <div class>
+              <ProfileIcon 
+              isSignedIn={this.props.isSignedIn} 
+              userSignedIn={this.props.userSignedIn} 
+              style={profileSize}/>
+            </div>
+              <div class = "card bg-dark border-light my-2" style={{width: "100%"}}>
+                <ul class = "list-group list-group-flush">
+                  <li class ="list-group-item border-light bg-dark">Name: { `${this.state.firstName} ${this.state.lastName}` }</li>
+                  <li class ="list-group-item border-light bg-dark">Username: {this.state.username}</li>
+                  <li class ="list-group-item border-light bg-dark">Email: { this.state.email }</li>
+                  <li class ="list-group-item border-light bg-dark">Entries: {this.state.savedEntries}</li>
+                </ul>
+              </div>
+            
+            </Col>      
+
           </Row>
 
-        </Container>
+          <Button 
+            color="danger"
+            onClick={this.toggleModal}>Edit Profile
+          </Button>
+            <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+              <ModalHeader toggle={this.toggleModal}>Modal title</ModalHeader>
+              <ModalBody>
+                
+              What information do you need to change?
 
+              <FormGroup controlId="formBasicEmail">
+                <Label className="d-flex justify-content-start">Email</Label>
+                <Input 
+                name="editEmail"
+                type="email" 
+                placeholder="Email"
+                value={this.state.editEmail}
+                onChange={this.handleInputChange}
+                />
+              </FormGroup>
+
+              <FormGroup controlId="formBasicFirstName">
+                <Label className="d-flex justify-content-start">First Name</Label>
+                <Input 
+                name="editFirstName"
+                type="text" 
+                placeholder="Morgan"
+                value={this.state.editFirstName}
+                onChange={this.handleInputChange}
+                />
+              </FormGroup>
+
+              <FormGroup controlId="formBasicLastName">
+                <Label className="d-flex justify-content-start">Last Name</Label>
+                <Input 
+                name="editLastName"
+                type="text" 
+                placeholder="Doe"
+                value={this.state.editLastName}
+                onChange={this.handleInputChange}
+                />
+              </FormGroup>
+
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onClick={() =>
+                  {
+                    let {editEmail, editFirstName, editLastName, email, firstName, lastName} = this.state
+                    if(!editEmail && !editFirstName && !editFirstName) {
+                      this.saveChanges(
+                      sessionStorage.getItem(`token`), 
+                      this.state.id, 
+                      editEmail, 
+                      editFirstName, 
+                      editLastName
+                    )}
+                    else if(!editEmail && !editFirstName && !editLastName) {
+                      alert("No information has been selected to update.")
+                    }
+                    // want to check what fields are empty and if they make sure to change their info to corresponding current into.
+                    else { 
+                      if(editEmail === "") {
+                        editEmail = email;
+                      }
+                      if(!editFirstName) {
+                        editFirstName = firstName;
+                      }
+                      if(!editLastName) { 
+                        editLastName = lastName;
+                      }
+                      this.saveChanges(
+                        sessionStorage.getItem(`token`), 
+                        this.state.id, 
+                        editEmail, 
+                        editFirstName, 
+                        editLastName
+                        )
+                      }
+                    }      
+                  }>Update
+                </Button>
+                <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
+              </ModalFooter>
+            </Modal>
+          
+        </div>
+        )}
 
         <Row style={{width:"100%"}}>
 
@@ -202,4 +441,3 @@ class UserPage extends Component {
 };
 
 export default UserPage;
-

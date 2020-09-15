@@ -1,0 +1,8 @@
+.sHeader {
+  background-color: gray;
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+  vertical-align: text-top;
+  padding: 10px 30px 10px 0;
+}
