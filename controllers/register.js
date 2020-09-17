@@ -3,11 +3,11 @@ const db = require("../models")
 const jwt = require('jsonwebtoken');
 const redis = require("redis");  
 const url = require('url');
-// const redisClient = redis.createClient(process.env.REDIS_URI);
+const redisClient = redis.createClient(process.env.REDIS_URI);
 
-const redisURL = url.parse(process.env.REDISCLOUD_URL);
-const redisClient = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-redisClient.auth(redisURL.auth.split(":")[1]);
+// const redisURL = url.parse(process.env.REDISCLOUD_URL);
+// const redisClient = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+// redisClient.auth(redisURL.auth.split(":")[1]);
 
 const handleRegister = (req, res, err) => {
 
@@ -18,115 +18,121 @@ const handleRegister = (req, res, err) => {
     return res.status(400).json("Missing required form items.");
   } else if( password != password2) {
     res.status(400).json("Passwords do not match.")
+  } else if(password.length < 8) {
+    console.log(password.length);
+    res.status(400).json("Password must be at least 8 characters.")
+  } 
+  
+  else {
+
+    if( !firstName && !lastName ) {
+      firstName = "Morgan";
+      lastName = "Doe";
+    } else if(!firstName) {
+      firstName = "Morgan"
+    } else if(!lastName) {
+      lastName = "Doe"
+    } 
+
+    db.Login.findOne( {where: {username: username.toLowerCase()} }).then( (existingUser) => {
+      if(existingUser) {res.status(400).json({ error: `Username is already taken.` })}
+      })
+      .catch( error => {
+        if(error) {return `Error setting up new user. ${error}`}
+      });
+
+    db.User.findOne( {where: {username: username.toLowerCase()}} ).then( (err, existingUser) => {
+      if(err) {res.status(400).json(`Error while creating user. ${err}`)}
+      else if(existingUser) {res.status(400).json({ error: `Username is already taken.` })}
+      })
+      .catch( error => {
+        if(error) {return `Error setting up new user. ${error}`}
+      });
+
+    const user = new db.User({
+
+      first_name: firstName,
+      last_name: lastName,
+      username: username.toLowerCase(),
+      email: email.toLowerCase(),
+      joined: new Date(),
+
+    });
+
+    user.save()
+    .catch( error => {
+      if(error) {return `Error creating user while registering to account. \n ${error} `};
+    });
+
+    const login = new db.Login({
+      username: username.toLowerCase(),
+      email: email.toLowerCase(),
+      password: password
+    });
+
+    login.save().then( (login) => {
+      createSessions(res, login)
+    })
+    .catch( error => {
+      if(error) {return `Error creating user while registering. \n ${error} `};
+    });
+
+  }
+
+  const signToken = (user) => {
+    const jwtPayload = { user };
+    return jwt.sign( jwtPayload, 'JWT_SECRET', {expiresIn: '24h'} );
   };
 
-  if( !firstName && !lastName ) {
-    firstName = "Morgan";
-    lastName = "Doe";
-  } else if(!firstName) {
-    firstName = "Morgan"
-  } else if(!lastName) {
-    lastName = "Doe"
-  } 
+  const setToken = (key, value) => {
+    return Promise.resolve(redisClient.set(key, value));
+  };
 
-  db.Login.findOne( {where: {username: username} }).then( (existingUser) => {
-    if(existingUser) {res.status(400).json({ error: `Username is already taken.` })}
-    })
-    .catch( error => {
-      if(error) {return `Error setting up new user. ${error}`}
-    });
-
-  db.User.findOne( {where: {username: username}} ).then( (err, existingUser) => {
-    if(err) {res.status(400).json(`Error while creating user. ${err}`)}
-    else if(existingUser) {res.status(400).json({ error: `Username is already taken.` })}
-    })
-    .catch( error => {
-      if(error) {return `Error setting up new user. ${error}`}
-    });
-
-  const user = new db.User({
-
-    first_name: firstName,
-    last_name: lastName,
-    username: username,
-    email: email,
-    joined: new Date(),
-
-  });
-
-  user.save()
-  .catch( error => {
-    if(error) {return `Error creating user while registering to account. \n ${error} `};
-  });
-
-  const login = new db.Login({
-    username: username,
-    email: email,
-    password: password
-  });
-
-  login.save().then( (login) => {
-    createSessions(res, login)
-  })
-  .catch( error => {
-    if(error) {return `Error creating user while registering. \n ${error} `};
-  });
-
-}
-
-const signToken = (user) => {
-  const jwtPayload = { user };
-  return jwt.sign( jwtPayload, 'JWT_SECRET', {expiresIn: '24h'} );
-};
-
-const setToken = (key, value) => {
-  return Promise.resolve(redisClient.set(key, value));
-};
-
-const createSessions = (res, user) => {
-  const {username, id } = user;
-  const token = signToken(username);
-  return setToken(token, id)
-  .then( () => {
-    return { success: 'true', userId: id, token}
-  })
-  .then(session => res.json(session))
-  .catch(error => {
-    if(error) {return `Error creating session while returning token. \n ${error}`}
-  })
-};
-
-const delAuthTokenId = (req, res) => {
-  const { authorization } = req.headers;
-  return redisClient.DEL(authorization, (err, reply) => {
-    console.log('Token deleted.');
-    if(err || !reply) {
-      return res.status(400).json('Token not deleted');
-    };
-    return res.json("Token deleted.")
-  });
-};
-
-const registerAuthentication = (req, res, err) => {
-  const { authorization } = req.headers;
-  if(authorization){
-    delAuthTokenId(req, res)
-    handleRegister(req, res, err)
-    .then(data => {
-      return data.id && data.username ? createSessions(data) :
-      Promise.reject(data)
+  const createSessions = (res, user) => {
+    const {username, id } = user;
+    const token = signToken(username);
+    return setToken(token, id)
+    .then( () => {
+      return { success: 'true', userId: id, token}
     })
     .then(session => res.json(session))
-    .catch(err => res.status(400).json(`Error verifying login during registration. ${err}`));
-  } else {
-    handleRegister(req, res, err)
-    .then(data => {
-      return data.id && data.username ? createSessions(data) :
-      Promise.reject(data)
+    .catch(error => {
+      if(error) {return `Error creating session while returning token. \n ${error}`}
     })
-    .then(session => res.json(session))
-    .catch(err => res.status(400).json(`Error verifying login during registration. ${err}`));
-  }
+  };
+
+  const delAuthTokenId = (req, res) => {
+    const { authorization } = req.headers;
+    return redisClient.DEL(authorization, (err, reply) => {
+      console.log('Token deleted.');
+      if(err || !reply) {
+        return res.status(400).json('Token not deleted');
+      };
+      return res.json("Token deleted.")
+    });
+  };
+
+  const registerAuthentication = (req, res, err) => {
+    const { authorization } = req.headers;
+    if(authorization){
+      delAuthTokenId(req, res)
+      handleRegister(req, res, err)
+      .then(data => {
+        return data.id && data.username ? createSessions(data) :
+        Promise.reject(data)
+      })
+      .then(session => res.json(session))
+      .catch(err => res.status(400).json(`Error verifying login during registration. ${err}`));
+    } else {
+      handleRegister(req, res, err)
+      .then(data => {
+        return data.id && data.username ? createSessions(data) :
+        Promise.reject(data)
+      })
+      .then(session => res.json(session))
+      .catch(err => res.status(400).json(`Error verifying login during registration. ${err}`));
+    }
+  };
 };
 
 module.exports = {
