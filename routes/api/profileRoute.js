@@ -9,4 +9,12 @@ router.route("/:id")
 router.route("/:id")
   .post(profile.handleProfileUpdate);
 
+// matches with api/profile/saveEntries:id
+router.route("/saveEntries/:id")
+  .post(profile.incrementEntries);
+
+// matches with api/profile/delEntries:id
+router.route("/delEntries/:id")
+  .post(profile.decrementEntries);
+
   module.exports = router;

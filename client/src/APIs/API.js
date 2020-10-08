@@ -28,7 +28,6 @@ export default {
 	},
 
 	updateUser: (data) => {
-		console.log(data);
 		const userInfo = {
 			email: data.newEmail,
 			first_name: data.newFirstName,
@@ -40,6 +39,17 @@ export default {
 		};
 		return (
 			axios.post(`api/profile/${data.id}`, userInfo, headers)
+		)
+	},
+
+	updateSavedEntries: (id, token) => {
+		
+		const headers = {
+			'Content-Type': 'application/json',
+			'Authorization': token
+		};
+		return (
+			axios.post(`api/profile/${id}`, headers)
 		)
 	},
 
