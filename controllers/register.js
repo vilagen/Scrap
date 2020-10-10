@@ -49,6 +49,19 @@ const handleRegister = (req, res, err) => {
         if(error) {return `Error setting up new user. ${error}`}
       });
 
+    const login = new db.Login({
+      username: username.toLowerCase(),
+      email: email.toLowerCase(),
+      password: password
+    });
+
+    login.save().then( (login) => {
+      createSessions(res, login)
+    })
+    .catch( error => {
+      if(error) {return `Error creating user while registering. \n ${error} `};
+    });
+
     const user = new db.User({
 
       first_name: firstName,
@@ -62,19 +75,6 @@ const handleRegister = (req, res, err) => {
     user.save()
     .catch( error => {
       if(error) {return `Error creating user while registering to account. \n ${error} `};
-    });
-
-    const login = new db.Login({
-      username: username.toLowerCase(),
-      email: email.toLowerCase(),
-      password: password
-    });
-
-    login.save().then( (login) => {
-      createSessions(res, login)
-    })
-    .catch( error => {
-      if(error) {return `Error creating user while registering. \n ${error} `};
     });
 
   }

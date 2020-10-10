@@ -42,18 +42,18 @@ export default {
 		)
 	},
 
-	updateSavedEntries: (id, token) => {
-		
+	incrementSavedEntries: (token, id) => {
 		const headers = {
 			'Content-Type': 'application/json',
 			'Authorization': token
 		};
 		return (
-			axios.post(`api/profile/${id}`, headers)
+			axios.post(`api/profile/saveEntries/${id}`, headers)
 		)
 	},
 
 	saveArticle: (data) => {
+
 		const newsItems = {
 			published: data.published,
 			author: data.author,
@@ -68,7 +68,13 @@ export default {
 				'Authorization': data.token
 			}
 		};
-		return axios.post(`/api/articles`, newsItems, headers);
+
+		return (
+			axios.post(`/api/articles`, newsItems, headers).then(res => {
+				axios.post(`api/profile/saveEntries/${data.id}`, headers)
+			})
+		)
+		// return axios.post(`/api/articles`, newsItems, headers)
 	},
 
 	deleteArticle: (token, id) => {
@@ -78,7 +84,12 @@ export default {
 				'Authorization': token
 			}
 		};
-		return axios.delete(`/api/articles/${id}`, headers)
+
+		return ( 
+			axios.delete(`/api/articles/${id}`, headers).then(res => {
+				axios.post(`api/profile/delEntries/${id}`, headers)
+			})
+		)
 	},
 
 	startSession: (token) => {

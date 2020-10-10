@@ -10,7 +10,6 @@ const redisClient = redis.createClient(process.env.REDIS_URI);
 const saveArticle = (req, res, err) => {
   const articles = req.body;
   const { authorization } = req.headers;
-  console.log("saveArticle " + authorization);
   if (authorization) {
     return redisClient.get(authorization, (err, reply) => {
       articles.UserId = reply

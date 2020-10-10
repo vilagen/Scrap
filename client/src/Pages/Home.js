@@ -78,9 +78,10 @@ class Home extends Component {
     window.sessionStorage.setItem('token', token) // session storage may be the preferred method.
 	}
 	
-	onClickSaveArticle = (token, published, author, title, image, description, url) => {
+	onClickSaveArticle = (token, id, published, author, title, image, description, url) => {
 		API.saveArticle({
 			token,
+			id,
 			published,
 			author,
 			title,
@@ -88,11 +89,11 @@ class Home extends Component {
 			description,
 			url
 		})
+		// .then(API.incrementSavedEntries(token, id))
 		.then(res => {
 			alert("Article Saved.")
-			console.log(res)
-		})
-	}
+		});
+	};
 
   onSubmitRegister = (event) => {
 		event.preventDefault();
@@ -111,7 +112,11 @@ class Home extends Component {
 			.then( data => {
 				console.log(data)
 				if (data.success === 'true' && data.userId) {
-				this.saveAuthTokenInSession(data.token)
+					this.saveAuthTokenInSession(data.token)
+					// this.setState({
+					// 	id: data.id
+					// })
+					console.log("This is id " + this.state.id)
 					fetch(`/api/profile/${data.userId}`, {
 						method: 'get',
 						headers: {
@@ -140,7 +145,7 @@ class Home extends Component {
 
 	render() {
 
-		console.log(`This is headline ${this.state.headlines}; this is topic ${this.state.topic}` )
+		console.log(`This is headline ${this.state.headlines}; this is topic ${this.state.topic}; this is id ${this.props.id}` )
 
 		const radioButtonStyle = {
 			display: "flex",
@@ -168,10 +173,11 @@ class Home extends Component {
 
 				<form className="newsSearch">
 
-						<label
+					<label
 						id="topic"
-						htmlFor="topic">Topic: </label>
-						<input
+						htmlFor="topic">Topic: 
+					</label>
+					<input
 						className="mx-2" 
 						name="topic"
 						type="text" 
@@ -181,7 +187,7 @@ class Home extends Component {
 						onChange={this.handleInputChange}
 						onSubmit={this.userNewsSearchSubmit}
 						placeholder="Politcs, people, sports, etc"
-						/>
+					/>
 
 					<div className="my-2 mx-5">
 
@@ -246,7 +252,7 @@ class Home extends Component {
 								url={stories.url}
 								published={stories.source.name}
 								allowSave={this.props.isSignedIn}
-								onSave={() => this.onClickSaveArticle(sessionStorage.getItem('token'), stories.source.name, 
+								onSave={() => this.onClickSaveArticle(sessionStorage.getItem('token'), this.props.id, stories.source.name, 
 								stories.author, stories.title, stories.urlToImage, stories.description, stories.url)}
 								/>
 							)
@@ -262,7 +268,7 @@ class Home extends Component {
 								url={stories.url}
 								published={stories.source.name}
 								allowSave={this.props.isSignedIn}
-								onSave={() => this.onClickSaveArticle(sessionStorage.getItem('token'), stories.source.name, 
+								onSave={() => this.onClickSaveArticle(sessionStorage.getItem('token'), this.props.id, stories.source.name, 
 								stories.author, stories.title, stories.urlToImage, stories.description, stories.url)}
 								/>
 							)
