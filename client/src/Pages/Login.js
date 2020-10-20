@@ -59,7 +59,7 @@ class Login extends Component {
 					.then( user => {
 						if(user && user.email) {
 							alert("Sign in was successful!")
-							this.props.userSignin("true");
+							this.props.userSignin("true", user.id);
 							this.setState({ redirect: "/"})
 						}
 					})
@@ -100,7 +100,7 @@ class Login extends Component {
 					.then( user => {
 						if(user && user.email) {
               alert("Sign in was successful!")
-              this.props.userSignin("true");
+              this.props.userSignin("true", user.id);
               this.setState({ redirect: "/"})
             }
           })

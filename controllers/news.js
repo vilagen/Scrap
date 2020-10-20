@@ -22,7 +22,7 @@ module.exports = {
     .then(data => {
       res.json(data.data.articles)
     })
-    .catch(err => cb.status(422).json(err));
+    .catch(err => res.status(422).json(err));
   },
 
   newsTopicEverything: (req, res) => {

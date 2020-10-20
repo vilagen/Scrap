@@ -52,6 +52,16 @@ export default {
 		)
 	},
 
+	decrementSavedEntries: (token, id) => {
+		const headers = {
+			'Content-Type': 'application/json',
+			'Authorization': token
+		};
+		return (
+			axios.post(`api/profile/delEntries/${id}`, headers)
+		)
+	},
+
 	saveArticle: (data) => {
 
 		const newsItems = {
@@ -69,13 +79,14 @@ export default {
 			}
 		};
 
-		return (
-			axios.post(`/api/articles`, newsItems, headers).then(res => {
-				axios.post(`api/profile/saveEntries/${data.id}`, headers)
-			})
-		)
-		// return axios.post(`/api/articles`, newsItems, headers)
+		return axios.post(`/api/articles`, newsItems, headers)
 	},
+
+	// return (
+	// 	axios.post(`/api/articles`, newsItems, headers).then(res => {
+	// 		axios.post(`api/profile/saveEntries/${data.id}`, headers)
+	// 	})
+	// )
 
 	deleteArticle: (token, id) => {
 		const headers = {
@@ -86,9 +97,7 @@ export default {
 		};
 
 		return ( 
-			axios.delete(`/api/articles/${id}`, headers).then(res => {
-				axios.post(`api/profile/delEntries/${id}`, headers)
-			})
+			axios.delete(`/api/articles/${id}`, headers)
 		)
 	},
 

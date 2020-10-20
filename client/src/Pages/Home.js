@@ -89,7 +89,7 @@ class Home extends Component {
 			description,
 			url
 		})
-		// .then(API.incrementSavedEntries(token, id))
+		.then(API.incrementSavedEntries(token, id))
 		.then(res => {
 			alert("Article Saved.")
 		});
@@ -132,7 +132,6 @@ class Home extends Component {
               fetch("api/currentnews")
               .then(res => res.json())
 							.then( res => this.setState({news: res}))
-							console.log(this.state.news)
 							this.toggleModal();
 						}
 					})
@@ -153,7 +152,7 @@ class Home extends Component {
 			justifyContent: "flex-start",
 		};
 
-		console.log(this.state.news);
+		console.log(this.props.id);
 
 		return (
 

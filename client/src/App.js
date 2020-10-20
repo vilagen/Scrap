@@ -97,11 +97,11 @@ class App extends Component {
     }
   };
 
-  userSignIn = (verify) => {
+  userSignIn = (verify, id) => {
     if (verify === "true") {
-      this.setState({isSignedIn: true});
+      this.setState({isSignedIn: true, id: id});
     } else {
-      this.setState({isSignedIn: false});
+      this.setState({isSignedIn: false, id: ''});
     }
   };
 

@@ -83,7 +83,7 @@ class SignUp extends Component {
 						if(user && user.email) {
 							console.log(user)
 							alert("Registeration was successful!")
-							this.props.userRegister("true");
+							this.props.userRegister("true", user.id);
 							this.setState({ redirect: "/"});
 						};
 					});
