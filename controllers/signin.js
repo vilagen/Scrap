@@ -47,6 +47,7 @@ const setToken = (key, value) => {
   return Promise.resolve(redisClient.set(key, value));
 };
 
+// if token isn't already saved on session storage, create token and ID info.
 const createSessions = (user) => {
   const {username, id } = user;
   const token = signToken(username);
@@ -59,6 +60,7 @@ const createSessions = (user) => {
   })
 };
 
+// if token is already saved on Session Storage, just return user.
 const getAuthTokenId = (req, res) => {
   const { authorization } = req.headers;
   return redisClient.get(authorization, (err, reply) => {

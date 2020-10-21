@@ -89,7 +89,7 @@ class Home extends Component {
 			description,
 			url
 		})
-		.then(API.incrementSavedEntries(token, id))
+		// .then(API.incrementSavedEntries(token, id))
 		.then(res => {
 			alert("Article Saved.")
 		});

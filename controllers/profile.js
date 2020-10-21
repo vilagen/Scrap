@@ -1,3 +1,4 @@
+const { sequelize } = require("../models");
 const db = require("../models");
 
 const handleProfileGet = (req, res, err) => {
@@ -34,33 +35,7 @@ const handleProfileUpdate = (req, res, err) => {
   .catch(err => res.status(400).json(`Error updating user. ${err}`))
 };
 
-// used when we added an article on someone's profile.
-const incrementEntries = (req, res, err) => {
-  const {id} = req.params;
-  db.User.findByPk(id).then ( (user, err) => {
-    if(user) {
-      user.increment('saved_entries');
-    }
-    else {
-      res.status(400).json(`Error updating article count after saving. ${err}`);
-    }
-  })
-};
-
-// used when removing an article from someone's profile.
-const decrementEntries = (req, res, err) => {
-  const {id} = req.params;
-  db.User.findByPk(id).then ( (user, err) => {
-    if(user) {
-      user.decrement('saved_entries');
-    }
-    else {
-      res.status(400).json(`Error updating article count after deleting. ${err}`);
-    }
-  })
-};
-
 
 module.exports ={
-  handleProfileGet, handleProfileUpdate, incrementEntries, decrementEntries
+  handleProfileGet, handleProfileUpdate
 };

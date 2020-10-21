@@ -17,6 +17,14 @@ const saveArticle = (req, res, err) => {
       .create(req.body)
       .then( data => res.json(data))
       .catch(err => res.status(422).json("Error " + err))
+      db.User.findByPk(reply).then ( (user, err) => {
+        if(user) {
+          user.increment('saved_entries');
+        }
+        else {
+          res.status(400).json(`Error updating article count after saving. ${err}`);
+        }
+      })
     });
   } else {
     return res.status(400).json("Unathorized; not able to save article.")
@@ -24,7 +32,22 @@ const saveArticle = (req, res, err) => {
 };
 
 const deleteArticle = (req, res, err) => {
+  // console.log(res);
   const {id} = req.params;
+  db.Article
+  .findByPk(id)
+  .then(dbArticle => {
+      db.User.findOne(
+        {where: {id: dbArticle.UserId} }).then( (user, err) => {
+        if(user) {
+          user.decrement('saved_entries');
+        }
+        else {
+          res.status(400).json(`Error updating article count after saving. ${err}`);
+        }
+      })
+    }
+  )
   db.Article
   .findByPk(id)
   .then(dbArticle => dbArticle.destroy())

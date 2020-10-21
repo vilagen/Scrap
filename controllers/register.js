@@ -56,25 +56,27 @@ const handleRegister = (req, res, err) => {
     });
 
     login.save().then( (login) => {
-      createSessions(res, login)
+
+      const user = new db.User({
+        first_name: firstName,
+        last_name: lastName,
+        username: username.toLowerCase(),
+        email: email.toLowerCase(),
+        joined: new Date(),
+        LoginId: login.id
+      });
+  
+      user.save().then( (user) => {
+        createSessions(res, user)
+      })
+
+      .catch( error => {
+        if(error) {return `Error creating user while registering to account. \n ${error} `};
+      });
     })
+    
     .catch( error => {
       if(error) {return `Error creating user while registering. \n ${error} `};
-    });
-
-    const user = new db.User({
-
-      first_name: firstName,
-      last_name: lastName,
-      username: username.toLowerCase(),
-      email: email.toLowerCase(),
-      joined: new Date(),
-
-    });
-
-    user.save()
-    .catch( error => {
-      if(error) {return `Error creating user while registering to account. \n ${error} `};
     });
 
   }
@@ -139,3 +141,18 @@ module.exports = {
   handleRegister: handleRegister,
   redisClient: redisClient
 };
+
+// const user = new db.User({
+
+//   first_name: firstName,
+//   last_name: lastName,
+//   username: username.toLowerCase(),
+//   email: email.toLowerCase(),
+//   joined: new Date(),
+
+// });
+
+// user.save()
+// .catch( error => {
+//   if(error) {return `Error creating user while registering to account. \n ${error} `};
+// });

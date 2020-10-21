@@ -42,26 +42,6 @@ export default {
 		)
 	},
 
-	incrementSavedEntries: (token, id) => {
-		const headers = {
-			'Content-Type': 'application/json',
-			'Authorization': token
-		};
-		return (
-			axios.post(`api/profile/saveEntries/${id}`, headers)
-		)
-	},
-
-	decrementSavedEntries: (token, id) => {
-		const headers = {
-			'Content-Type': 'application/json',
-			'Authorization': token
-		};
-		return (
-			axios.post(`api/profile/delEntries/${id}`, headers)
-		)
-	},
-
 	saveArticle: (data) => {
 
 		const newsItems = {
@@ -79,14 +59,10 @@ export default {
 			}
 		};
 
-		return axios.post(`/api/articles`, newsItems, headers)
-	},
+		// axios.post(`api/profile/saveEntries/${data.id}`, headers)
 
-	// return (
-	// 	axios.post(`/api/articles`, newsItems, headers).then(res => {
-	// 		axios.post(`api/profile/saveEntries/${data.id}`, headers)
-	// 	})
-	// )
+		return axios.post(`/api/articles`, newsItems, headers);
+	},
 
 	deleteArticle: (token, id) => {
 		
@@ -161,23 +137,19 @@ export default {
 				'Content-Type': 'application/json'
 			}
 		};
-		return (
-			axios.post('/api/signin', userInfo, headers)
-			.then( res => res.json())
-		)
+		return axios.post('/api/signin', userInfo, headers)
 	},
 
-	userProfile: (data) => {
+	userProfile: (userId, token) => {
 		return(
-			axios.get(`/api/profile/${data.userId}`, 
+			axios.get(`/api/profile/${userId}`, 
 				{
 					headers: {
 						'Content-Type': 'application/json',
-						'Authorization': data.token,	
+						'Authorization': token,	
 					}
 				}
 			)
-			.then(res=>res.json())
 		)
 	}
 

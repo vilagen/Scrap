@@ -60,19 +60,11 @@ class SignUp extends Component {
 			.then( res => {
 				if (res.data.success === 'true' && res.data.userId) {
 				this.saveAuthTokenInSession(res.data.token)
-					fetch(`/api/profile/${res.data.userId}`, {
-						method: 'get',
-						headers: {
-							'Content-Type': 'application/json',
-							'Authorization': res.data.token,					
-						}
-					})
-					.then(res => res.json())
+					API.userProfile(res.data.userId, res.data.token)
 					.then( user => {
-						if(user && user.email) {
-							console.log(user)
+						if(user && user.data.email) {
 							alert("Registeration was successful!")
-							this.props.userRegister("true", user.id);
+							this.props.userRegister("true", user.data.id);
 							this.setState({ redirect: "/"});
 						};
 					});

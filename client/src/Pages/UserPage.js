@@ -40,16 +40,16 @@ class UserPage extends Component {
 
   loadArticles = (token, id) => {
     API.retrieveUserInfo(token, id)
-      .then(res => this.setState({ userArticles: res.data.Articles }))
+      .then(res => this.setState({ 
+        userArticles: res.data.Articles,
+        savedEntries: res.data.saved_entries,
+      }))
       // .then(res => console.log(this.state.userArticles))
       .catch(err => console.log(`There was an error retrieving articles. ${err}`));
   };
 
-  onClickDelete = (token, articleID, id) => {
+  onClickDelete = (token, articleID) => {
     API.deleteArticle(token, articleID)
-      .then(res=> { 
-        API.decrementSavedEntries(token, id) 
-      })
       .then(res=> { this.loadArticles(token, this.state.id)
       })
   };
@@ -132,7 +132,7 @@ class UserPage extends Component {
           this.setState({ redirect: "/"});
         };
       })
-      .catch(console.log("Don't have token or failed to work properly."));
+      .catch(console.log(`Don't have token or failed to work properly. ${token}`));
       } else {
         console.log(`From userPage ${token}`)
         this.setState({ isSignedIn: false});
@@ -430,7 +430,7 @@ class UserPage extends Component {
               url={stories.url}
               published={stories.published}
               allowDelete={this.props.isSignedIn}
-              onDelete={() => this.onClickDelete(pagetoken, stories.id, this.state.id)}
+              onDelete={() => this.onClickDelete(pagetoken, stories.id)}
 								/>
 							)
 						)};
