@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button, Form, FormGroup, Label, Input, Card, CardBody } from "reactstrap";
 import { Link, Redirect } from "react-router-dom";
 import './pagesStyle.css';
+import API from "../APIs/API";
 
 class SignUp extends Component {
 
@@ -54,28 +55,16 @@ class SignUp extends Component {
 	 	} else if (this.state.password.length < 8) {
 			 alert("Password must be at least 8 characters.")
 		} else {
-			fetch('/api/register', {
-				method: "post",
-				headers: {"Content-Type": "application/json"},
-				body: JSON.stringify({
-					username: this.state.username,
-					email: this.state.email,
-					firstName: this.state.firstName,
-					lastName: this.state.lastName,
-					password: this.state.password,
-					password2: this.state.password2,
-				})
-			})
-			.then( res => res.json())
-			.then( data => {
-				console.log(data)
-				if (data.success === 'true' && data.userId) {
-				this.saveAuthTokenInSession(data.token)
-					fetch(`/api/profile/${data.userId}`, {
+			API.registerUser(this.state.username, this.state.email, this.state.firstName, 
+				this.state.lastName, this.state.password, this.state.password2)
+			.then( res => {
+				if (res.data.success === 'true' && res.data.userId) {
+				this.saveAuthTokenInSession(res.data.token)
+					fetch(`/api/profile/${res.data.userId}`, {
 						method: 'get',
 						headers: {
 							'Content-Type': 'application/json',
-							'Authorization': data.token,					
+							'Authorization': res.data.token,					
 						}
 					})
 					.then(res => res.json())
@@ -88,7 +77,7 @@ class SignUp extends Component {
 						};
 					});
 				} else {
-					this.setState({registerError: data.error})
+					this.setState({registerError: res.data.error})
 					alert(this.state.registerError);
 				}
 			});
@@ -223,3 +212,52 @@ class SignUp extends Component {
 };
 
 export default SignUp;
+
+// keeping this to help remember how to use fetch on frontend.
+// if (this.state.username === "" || this.state.email === "" || this.state.password === "" || this.state.password2 === "") {
+// 	alert("All required fields must be filled out.")
+// } else if (this.state.password !== this.state.password2) {
+// 	alert("Passwords do not match.")
+//  } else if (this.state.password.length < 8) {
+// 	 alert("Password must be at least 8 characters.")
+// } else {
+// 	fetch('/api/register', {
+// 		method: "post",
+// 		headers: {"Content-Type": "application/json"},
+// 		body: JSON.stringify({
+// 			username: this.state.username,
+// 			email: this.state.email,
+// 			firstName: this.state.firstName,
+// 			lastName: this.state.lastName,
+// 			password: this.state.password,
+// 			password2: this.state.password2,
+// 		})
+// 	})
+// 	.then( res => res.json())
+// 	.then( data => {
+// 		console.log(data)
+// 		if (data.success === 'true' && data.userId) {
+// 		this.saveAuthTokenInSession(data.token)
+// 			fetch(`/api/profile/${data.userId}`, {
+// 				method: 'get',
+// 				headers: {
+// 					'Content-Type': 'application/json',
+// 					'Authorization': data.token,					
+// 				}
+// 			})
+// 			.then(res => res.json())
+// 			.then( user => {
+// 				if(user && user.email) {
+// 					console.log(user)
+// 					alert("Registeration was successful!")
+// 					this.props.userRegister("true", user.id);
+// 					this.setState({ redirect: "/"});
+// 				};
+// 			});
+// 		} else {
+// 			this.setState({registerError: data.error})
+// 			alert(this.state.registerError);
+// 		}
+// 	});
+// };
+// }; 

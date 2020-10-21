@@ -89,6 +89,7 @@ export default {
 	// )
 
 	deleteArticle: (token, id) => {
+		
 		const headers = {
 			headers: {
 				'Content-Type': 'application/json',
@@ -99,6 +100,24 @@ export default {
 		return ( 
 			axios.delete(`/api/articles/${id}`, headers)
 		)
+	},
+
+	registerUser: (username, email, firstName, lastName, password, password2) => {
+
+		return axios({
+			method: 'post',
+			url: `/api/register`, 
+			headers: {"Content-Type": "application/json"},
+			data: {
+				username: username,
+				email: email,
+				firstName: firstName,
+				lastName: lastName,
+				password: password,
+				password2: password2
+			},
+		})
+
 	},
 
 	startSession: (token) => {
